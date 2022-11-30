@@ -87,35 +87,6 @@ spec:
     - Ingress
 
 ---
-# networking.k8s.io/v1/NetworkPolicy iam
-apiVersion: networking.k8s.io/v1
-kind: NetworkPolicy
-metadata:
-  creationTimestamp: null
-  labels:
-    app: gitpod
-    component: iam
-  name: iam
-  namespace: default
-spec:
-  ingress:
-    - from:
-        - podSelector:
-            matchLabels:
-              component: proxy
-      ports:
-        - port: 9001
-          protocol: TCP
-        - port: 9002
-          protocol: TCP
-  podSelector:
-    matchLabels:
-      app: gitpod
-      component: iam
-  policyTypes:
-    - Ingress
-
----
 # networking.k8s.io/v1/NetworkPolicy ide-metrics
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
@@ -208,7 +179,7 @@ metadata:
   namespace: "default"
   labels:
     app.kubernetes.io/name: rabbitmq
-    helm.sh/chart: rabbitmq-11.3.0
+    helm.sh/chart: rabbitmq-10.1.1
     app.kubernetes.io/instance: rabbitmq
     app.kubernetes.io/managed-by: Helm
 spec:
@@ -384,14 +355,6 @@ spec:
               component: gitpod
       ports:
         - port: 9000
-          protocol: TCP
-    - from:
-        - podSelector:
-            matchLabels:
-              app: gitpod
-              component: iam
-      ports:
-        - port: 9876
           protocol: TCP
   podSelector:
     matchLabels:
@@ -732,7 +695,6 @@ spec:
   - server
   - ws-manager-bridge
   - ws-proxy
-  - image-builder-mk3
   - ws-manager
   duration: 2160h0m0s
   issuerRef:
@@ -783,7 +745,7 @@ metadata:
   namespace: "default"
   labels:
     app.kubernetes.io/name: rabbitmq
-    helm.sh/chart: rabbitmq-11.3.0
+    helm.sh/chart: rabbitmq-10.1.1
     app.kubernetes.io/instance: rabbitmq
     app.kubernetes.io/managed-by: Helm
 spec:
@@ -949,22 +911,6 @@ metadata:
   name: migrations
   namespace: default
 ---
-# v1/ServiceAccount minio
-# Source: minio/charts/minio/templates/serviceaccount.yaml
-apiVersion: v1
-kind: ServiceAccount
-metadata:
-  name: minio
-  namespace: "default"
-  labels:
-    app.kubernetes.io/name: minio
-    helm.sh/chart: minio-11.10.24
-    app.kubernetes.io/instance: minio
-    app.kubernetes.io/managed-by: Helm
-automountServiceAccountToken: true
-secrets:
-  - name: minio
----
 # v1/ServiceAccount nobody
 apiVersion: v1
 automountServiceAccountToken: true
@@ -1022,7 +968,7 @@ metadata:
   namespace: "default"
   labels:
     app.kubernetes.io/name: rabbitmq
-    helm.sh/chart: rabbitmq-11.3.0
+    helm.sh/chart: rabbitmq-10.1.1
     app.kubernetes.io/instance: rabbitmq
     app.kubernetes.io/managed-by: Helm
 automountServiceAccountToken: true
@@ -1116,9 +1062,9 @@ metadata:
 # v1/Secret builtin-registry-auth
 apiVersion: v1
 data:
-  .dockerconfigjson: eyJhdXRocyI6eyJyZWdpc3RyeS5naXRwb2QuZXhhbXBsZS5jb20iOnsiYXV0aCI6ImVIZDVRMGRsTlZVd1RrRnFObFZsYVhFM1RqQTZWbE5UYkcxaFMxZFFhaTVRVVhCdFZXWnNWR1E9In19fQ==
-  password: VlNTbG1hS1dQai5QUXBtVWZsVGQ=
-  user: eHd5Q0dlNVUwTkFqNlVlaXE3TjA=
+  .dockerconfigjson: eyJhdXRocyI6eyJyZWdpc3RyeS5naXRwb2QuZXhhbXBsZS5jb20iOnsiYXV0aCI6ImVGTmxaRXBwUkdkS1VWRm5ORUpyVnpWNFMzVTZRMWMwUTFKQ2FtazJVakJpUjBjNE1XZDVSWGs9In19fQ==
+  password: Q1c0Q1JCamk2UjBiR0c4MWd5RXk=
+  user: eFNlZEppRGdKUVFnNEJrVzV4S3U=
 kind: Secret
 metadata:
   creationTimestamp: null
@@ -1152,7 +1098,7 @@ metadata:
   namespace: "default"
   labels:
     app.kubernetes.io/name: rabbitmq
-    helm.sh/chart: rabbitmq-11.3.0
+    helm.sh/chart: rabbitmq-10.1.1
     app.kubernetes.io/instance: rabbitmq
     app.kubernetes.io/managed-by: Helm
 type: Opaque
@@ -1168,7 +1114,7 @@ metadata:
   namespace: "default"
   labels:
     app.kubernetes.io/name: rabbitmq
-    helm.sh/chart: rabbitmq-11.3.0
+    helm.sh/chart: rabbitmq-10.1.1
     app.kubernetes.io/instance: rabbitmq
     app.kubernetes.io/managed-by: Helm
 type: Opaque
@@ -1199,13 +1145,13 @@ metadata:
   namespace: "default"
   labels:
     app.kubernetes.io/name: rabbitmq
-    helm.sh/chart: rabbitmq-11.3.0
+    helm.sh/chart: rabbitmq-10.1.1
     app.kubernetes.io/instance: rabbitmq
     app.kubernetes.io/managed-by: Helm
 type: Opaque
 data:
   rabbitmq.conf: |-
-    IyMgVXNlcm5hbWUgYW5kIHBhc3N3b3JkCiMjCmRlZmF1bHRfdXNlciA9IGdpdHBvZAojIyBDbHVzdGVyaW5nCiMjCmNsdXN0ZXJfZm9ybWF0aW9uLnBlZXJfZGlzY292ZXJ5X2JhY2tlbmQgID0gcmFiYml0X3BlZXJfZGlzY292ZXJ5X2s4cwpjbHVzdGVyX2Zvcm1hdGlvbi5rOHMuaG9zdCA9IGt1YmVybmV0ZXMuZGVmYXVsdApjbHVzdGVyX2Zvcm1hdGlvbi5ub2RlX2NsZWFudXAuaW50ZXJ2YWwgPSAxMApjbHVzdGVyX2Zvcm1hdGlvbi5ub2RlX2NsZWFudXAub25seV9sb2dfd2FybmluZyA9IHRydWUKY2x1c3Rlcl9wYXJ0aXRpb25faGFuZGxpbmcgPSBhdXRvaGVhbApsb2FkX2RlZmluaXRpb25zID0gL2FwcC9sb2FkX2RlZmluaXRpb24uanNvbgojIHF1ZXVlIG1hc3RlciBsb2NhdG9yCnF1ZXVlX21hc3Rlcl9sb2NhdG9yID0gbWluLW1hc3RlcnMKIyBlbmFibGUgZ3Vlc3QgdXNlcgpsb29wYmFja191c2Vycy5ndWVzdCA9IGZhbHNlCmxvYWRfZGVmaW5pdGlvbnMgPSAvYXBwL2xvYWRfZGVmaW5pdGlvbi5qc29uCiMgSW5jcmVhc2Ugc3RhdGlzdGljcyBlbWlzc2lvbiBpbnRlcnZhbCBodHRwczovL3d3dy5yYWJiaXRtcS5jb20vbWFuYWdlbWVudC5odG1sI3N0YXRpc3RpY3MtaW50ZXJ2YWwKY29sbGVjdF9zdGF0aXN0aWNzX2ludGVydmFsID0gMTUwMDAKCnNzbF9vcHRpb25zLnZlcmlmeSA9IHZlcmlmeV9wZWVyCmxpc3RlbmVycy5zc2wuZGVmYXVsdCA9IDU2NzEKc3NsX29wdGlvbnMuZmFpbF9pZl9ub19wZWVyX2NlcnQgPSB0cnVlCnNzbF9vcHRpb25zLmNhY2VydGZpbGUgPSAvb3B0L2JpdG5hbWkvcmFiYml0bXEvY2VydHMvY2FfY2VydGlmaWNhdGUucGVtCnNzbF9vcHRpb25zLmNlcnRmaWxlID0gL29wdC9iaXRuYW1pL3JhYmJpdG1xL2NlcnRzL3NlcnZlcl9jZXJ0aWZpY2F0ZS5wZW0Kc3NsX29wdGlvbnMua2V5ZmlsZSA9IC9vcHQvYml0bmFtaS9yYWJiaXRtcS9jZXJ0cy9zZXJ2ZXJfa2V5LnBlbQojIyBQcm9tZXRoZXVzIG1ldHJpY3MKIyMKcHJvbWV0aGV1cy50Y3AucG9ydCA9IDk0MTk=
+    IyMgVXNlcm5hbWUgYW5kIHBhc3N3b3JkCiMjCmRlZmF1bHRfdXNlciA9IGdpdHBvZApkZWZhdWx0X3Bhc3MgPSBDSEFOR0VNRQojIyBDbHVzdGVyaW5nCiMjCmNsdXN0ZXJfZm9ybWF0aW9uLnBlZXJfZGlzY292ZXJ5X2JhY2tlbmQgID0gcmFiYml0X3BlZXJfZGlzY292ZXJ5X2s4cwpjbHVzdGVyX2Zvcm1hdGlvbi5rOHMuaG9zdCA9IGt1YmVybmV0ZXMuZGVmYXVsdApjbHVzdGVyX2Zvcm1hdGlvbi5ub2RlX2NsZWFudXAuaW50ZXJ2YWwgPSAxMApjbHVzdGVyX2Zvcm1hdGlvbi5ub2RlX2NsZWFudXAub25seV9sb2dfd2FybmluZyA9IHRydWUKY2x1c3Rlcl9wYXJ0aXRpb25faGFuZGxpbmcgPSBhdXRvaGVhbApsb2FkX2RlZmluaXRpb25zID0gL2FwcC9sb2FkX2RlZmluaXRpb24uanNvbgojIHF1ZXVlIG1hc3RlciBsb2NhdG9yCnF1ZXVlX21hc3Rlcl9sb2NhdG9yID0gbWluLW1hc3RlcnMKIyBlbmFibGUgZ3Vlc3QgdXNlcgpsb29wYmFja191c2Vycy5ndWVzdCA9IGZhbHNlCmxvYWRfZGVmaW5pdGlvbnMgPSAvYXBwL2xvYWRfZGVmaW5pdGlvbi5qc29uCiMgSW5jcmVhc2Ugc3RhdGlzdGljcyBlbWlzc2lvbiBpbnRlcnZhbCBodHRwczovL3d3dy5yYWJiaXRtcS5jb20vbWFuYWdlbWVudC5odG1sI3N0YXRpc3RpY3MtaW50ZXJ2YWwKY29sbGVjdF9zdGF0aXN0aWNzX2ludGVydmFsID0gMTUwMDAKCnNzbF9vcHRpb25zLnZlcmlmeSA9IHZlcmlmeV9wZWVyCmxpc3RlbmVycy5zc2wuZGVmYXVsdCA9IDU2NzEKc3NsX29wdGlvbnMuZmFpbF9pZl9ub19wZWVyX2NlcnQgPSB0cnVlCnNzbF9vcHRpb25zLmNhY2VydGZpbGUgPSAvb3B0L2JpdG5hbWkvcmFiYml0bXEvY2VydHMvY2FfY2VydGlmaWNhdGUucGVtCnNzbF9vcHRpb25zLmNlcnRmaWxlID0gL29wdC9iaXRuYW1pL3JhYmJpdG1xL2NlcnRzL3NlcnZlcl9jZXJ0aWZpY2F0ZS5wZW0Kc3NsX29wdGlvbnMua2V5ZmlsZSA9IC9vcHQvYml0bmFtaS9yYWJiaXRtcS9jZXJ0cy9zZXJ2ZXJfa2V5LnBlbQojIyBQcm9tZXRoZXVzIG1ldHJpY3MKIyMKcHJvbWV0aGV1cy50Y3AucG9ydCA9IDk0MTk=
 ---
 # v1/Secret messagebus-erlang-cookie
 apiVersion: v1
@@ -1219,24 +1165,6 @@ metadata:
     component: rabbitmq
   name: messagebus-erlang-cookie
   namespace: default
----
-# v1/Secret minio
-# Source: minio/charts/minio/templates/secrets.yaml
-apiVersion: v1
-kind: Secret
-metadata:
-  name: minio
-  namespace: "default"
-  labels:
-    app.kubernetes.io/name: minio
-    helm.sh/chart: minio-11.10.24
-    app.kubernetes.io/instance: minio
-    app.kubernetes.io/managed-by: Helm
-type: Opaque
-data:
-  root-user: "UkJqaTZSMGJHRzgxZ3lFeWUyNVA="
-  root-password: "dFg2TUw4Z0NXMzFtaXcwVDhRTUk="
-  key.json: ""
 ---
 # v1/Secret mysql
 apiVersion: v1
@@ -1265,7 +1193,7 @@ metadata:
   namespace: "default"
   labels:
     app.kubernetes.io/name: rabbitmq
-    helm.sh/chart: rabbitmq-11.3.0
+    helm.sh/chart: rabbitmq-10.1.1
     app.kubernetes.io/instance: rabbitmq
     app.kubernetes.io/managed-by: Helm
 type: Opaque
@@ -1282,7 +1210,7 @@ metadata:
   namespace: default
   labels:
     app: docker-registry
-    chart: docker-registry-2.2.2
+    chart: docker-registry-1.16.0
     heritage: Helm
     release: docker-registry
 type: Opaque
@@ -1422,20 +1350,24 @@ data:
       },
       "storage": {
         "stage": "",
-        "kind": "minio",
+        "kind": "s3",
         "gcloud": {
           "credentialsFile": "",
           "region": "",
           "projectId": ""
         },
         "minio": {
-          "endpoint": "minio.default.svc.cluster.local:9000",
-          "accessKey": "RBji6R0bGG81gyEye25P",
+          "endpoint": "",
+          "accessKey": "",
           "accessKeyFile": "",
-          "secretKey": "tX6ML8gCW31miw0T8QMI",
+          "secretKey": "",
           "secretKeyFile": "",
+          "region": ""
+        },
+        "s3": {
+          "bucket": "s3-bucket",
           "region": "local",
-          "parallelUpload": 6
+          "credentialsFile": "/mnt/secrets/storage/credentials"
         },
         "blobQuota": 5368709120
       }
@@ -1528,15 +1460,20 @@ data:
       region: local
       shortname: default
     objectStorage:
-      inCluster: true
+      inCluster: false
       resources:
         requests:
           memory: 2Gi
+      s3:
+        allowInsecureConnection: true
+        bucket: s3-bucket
+        credentials:
+          kind: secret
+          name: s3-storage
+        endpoint: s3-provider.com
     observability:
       logLevel: info
     openVSX:
-      proxy:
-        disablePVC: true
       url: https://open-vsx.org
     personalAccessTokenSigningKey:
       kind: secret
@@ -2316,16 +2253,6 @@ data:
         app: gitpod
         component: iam
         kind: service
-      name: iam
-      namespace: default
-    ---
-    apiVersion: networking.k8s.io/v1
-    kind: NetworkPolicy
-    metadata:
-      creationTimestamp: null
-      labels:
-        app: gitpod
-        component: iam
       name: iam
       namespace: default
     ---
@@ -3436,7 +3363,7 @@ data:
       creationTimestamp: null
       labels:
         app: docker-registry
-        chart: docker-registry-2.2.2
+        chart: docker-registry-1.16.0
         heritage: Helm
         release: docker-registry
       name: registry-secret
@@ -3448,7 +3375,7 @@ data:
       creationTimestamp: null
       labels:
         app: docker-registry
-        chart: docker-registry-2.2.2
+        chart: docker-registry-1.16.0
         heritage: Helm
         release: docker-registry
       name: registry-config
@@ -3460,7 +3387,7 @@ data:
       creationTimestamp: null
       labels:
         app: registry
-        chart: docker-registry-2.2.2
+        chart: docker-registry-1.16.0
         heritage: Helm
         release: docker-registry
       name: registry
@@ -3472,7 +3399,7 @@ data:
       creationTimestamp: null
       labels:
         app: docker-registry
-        chart: docker-registry-2.2.2
+        chart: docker-registry-1.16.0
         heritage: Helm
         release: docker-registry
       name: registry
@@ -3484,7 +3411,7 @@ data:
       creationTimestamp: null
       labels:
         app: docker-registry
-        chart: docker-registry-2.2.2
+        chart: docker-registry-1.16.0
         heritage: Helm
         release: docker-registry
       name: registry
@@ -3499,7 +3426,7 @@ data:
         app.kubernetes.io/instance: mysql
         app.kubernetes.io/managed-by: Helm
         app.kubernetes.io/name: mysql
-        helm.sh/chart: mysql-9.4.5
+        helm.sh/chart: mysql-9.1.2
       name: mysql
       namespace: default
     ---
@@ -3512,7 +3439,7 @@ data:
         app.kubernetes.io/instance: mysql
         app.kubernetes.io/managed-by: Helm
         app.kubernetes.io/name: mysql
-        helm.sh/chart: mysql-9.4.5
+        helm.sh/chart: mysql-9.1.2
       name: mysql-headless
       namespace: default
     ---
@@ -3525,7 +3452,7 @@ data:
         app.kubernetes.io/instance: mysql
         app.kubernetes.io/managed-by: Helm
         app.kubernetes.io/name: mysql
-        helm.sh/chart: mysql-9.4.5
+        helm.sh/chart: mysql-9.1.2
       name: mysql
       namespace: default
     ---
@@ -3538,68 +3465,8 @@ data:
         app.kubernetes.io/instance: mysql
         app.kubernetes.io/managed-by: Helm
         app.kubernetes.io/name: mysql
-        helm.sh/chart: mysql-9.4.5
+        helm.sh/chart: mysql-9.1.2
       name: mysql
-      namespace: default
-    ---
-    apiVersion: v1
-    kind: ServiceAccount
-    metadata:
-      creationTimestamp: null
-      labels:
-        app.kubernetes.io/instance: minio
-        app.kubernetes.io/managed-by: Helm
-        app.kubernetes.io/name: minio
-        helm.sh/chart: minio-11.10.24
-      name: minio
-      namespace: default
-    ---
-    apiVersion: v1
-    kind: Secret
-    metadata:
-      creationTimestamp: null
-      labels:
-        app.kubernetes.io/instance: minio
-        app.kubernetes.io/managed-by: Helm
-        app.kubernetes.io/name: minio
-        helm.sh/chart: minio-11.10.24
-      name: minio
-      namespace: default
-    ---
-    apiVersion: v1
-    kind: PersistentVolumeClaim
-    metadata:
-      creationTimestamp: null
-      labels:
-        app.kubernetes.io/instance: minio
-        app.kubernetes.io/managed-by: Helm
-        app.kubernetes.io/name: minio
-        helm.sh/chart: minio-11.10.24
-      name: minio
-      namespace: default
-    ---
-    apiVersion: v1
-    kind: Service
-    metadata:
-      creationTimestamp: null
-      labels:
-        app.kubernetes.io/instance: minio
-        app.kubernetes.io/managed-by: Helm
-        app.kubernetes.io/name: minio
-        helm.sh/chart: minio-11.10.24
-      name: minio
-      namespace: default
-    ---
-    apiVersion: apps/v1
-    kind: Deployment
-    metadata:
-      creationTimestamp: null
-      labels:
-        app.kubernetes.io/instance: minio
-        app.kubernetes.io/managed-by: Helm
-        app.kubernetes.io/name: minio
-        helm.sh/chart: minio-11.10.24
-      name: minio
       namespace: default
     ---
     apiVersion: networking.k8s.io/v1
@@ -3610,7 +3477,7 @@ data:
         app.kubernetes.io/instance: rabbitmq
         app.kubernetes.io/managed-by: Helm
         app.kubernetes.io/name: rabbitmq
-        helm.sh/chart: rabbitmq-11.3.0
+        helm.sh/chart: rabbitmq-10.1.1
       name: messagebus
       namespace: default
     ---
@@ -3622,7 +3489,7 @@ data:
         app.kubernetes.io/instance: rabbitmq
         app.kubernetes.io/managed-by: Helm
         app.kubernetes.io/name: rabbitmq
-        helm.sh/chart: rabbitmq-11.3.0
+        helm.sh/chart: rabbitmq-10.1.1
       name: messagebus
       namespace: default
     ---
@@ -3634,7 +3501,7 @@ data:
         app.kubernetes.io/instance: rabbitmq
         app.kubernetes.io/managed-by: Helm
         app.kubernetes.io/name: rabbitmq
-        helm.sh/chart: rabbitmq-11.3.0
+        helm.sh/chart: rabbitmq-10.1.1
       name: rabbitmq
       namespace: default
     ---
@@ -3646,7 +3513,7 @@ data:
         app.kubernetes.io/instance: rabbitmq
         app.kubernetes.io/managed-by: Helm
         app.kubernetes.io/name: rabbitmq
-        helm.sh/chart: rabbitmq-11.3.0
+        helm.sh/chart: rabbitmq-10.1.1
       name: messagebus-config
       namespace: default
     ---
@@ -3658,7 +3525,7 @@ data:
         app.kubernetes.io/instance: rabbitmq
         app.kubernetes.io/managed-by: Helm
         app.kubernetes.io/name: rabbitmq
-        helm.sh/chart: rabbitmq-11.3.0
+        helm.sh/chart: rabbitmq-10.1.1
       name: messagebus
       namespace: default
     ---
@@ -3670,7 +3537,7 @@ data:
         app.kubernetes.io/instance: rabbitmq
         app.kubernetes.io/managed-by: Helm
         app.kubernetes.io/name: rabbitmq
-        helm.sh/chart: rabbitmq-11.3.0
+        helm.sh/chart: rabbitmq-10.1.1
       name: load-definition
       namespace: default
     ---
@@ -3682,7 +3549,7 @@ data:
         app.kubernetes.io/instance: rabbitmq
         app.kubernetes.io/managed-by: Helm
         app.kubernetes.io/name: rabbitmq
-        helm.sh/chart: rabbitmq-11.3.0
+        helm.sh/chart: rabbitmq-10.1.1
       name: rabbitmq
       namespace: default
     ---
@@ -3694,7 +3561,7 @@ data:
         app.kubernetes.io/instance: rabbitmq
         app.kubernetes.io/managed-by: Helm
         app.kubernetes.io/name: rabbitmq
-        helm.sh/chart: rabbitmq-11.3.0
+        helm.sh/chart: rabbitmq-10.1.1
       name: messagebus-endpoint-reader
       namespace: default
     ---
@@ -3706,7 +3573,7 @@ data:
         app.kubernetes.io/instance: rabbitmq
         app.kubernetes.io/managed-by: Helm
         app.kubernetes.io/name: rabbitmq
-        helm.sh/chart: rabbitmq-11.3.0
+        helm.sh/chart: rabbitmq-10.1.1
       name: messagebus-endpoint-reader
       namespace: default
     ---
@@ -3718,7 +3585,7 @@ data:
         app.kubernetes.io/instance: rabbitmq
         app.kubernetes.io/managed-by: Helm
         app.kubernetes.io/name: rabbitmq
-        helm.sh/chart: rabbitmq-11.3.0
+        helm.sh/chart: rabbitmq-10.1.1
       name: messagebus-headless
       namespace: default
     ---
@@ -3730,7 +3597,7 @@ data:
         app.kubernetes.io/instance: rabbitmq
         app.kubernetes.io/managed-by: Helm
         app.kubernetes.io/name: rabbitmq
-        helm.sh/chart: rabbitmq-11.3.0
+        helm.sh/chart: rabbitmq-10.1.1
       name: messagebus
       namespace: default
     ---
@@ -3742,7 +3609,7 @@ data:
         app.kubernetes.io/instance: rabbitmq
         app.kubernetes.io/managed-by: Helm
         app.kubernetes.io/name: rabbitmq
-        helm.sh/chart: rabbitmq-11.3.0
+        helm.sh/chart: rabbitmq-10.1.1
       name: messagebus
       namespace: default
     ---
@@ -3796,7 +3663,6 @@ apiVersion: v1
 data:
   config.json: |-
     {
-      "gpRunImage": "registry.hub.docker.com/gitpod/gp-run:latest",
       "supervisorImage": "eu.gcr.io/gitpod-core-dev/build/supervisor:test",
       "ideOptions": {
         "options": {
@@ -3824,7 +3690,7 @@ data:
             "type": "browser",
             "logo": "https://ide.gitpod.example.com/image/ide-logo/vscode.svg",
             "label": "Browser",
-            "image": "eu.gcr.io/gitpod-core-dev/build/ide/code:commit-fdf6a08a681c53ddd97c7bae9acc7d49158a41a0",
+            "image": "eu.gcr.io/gitpod-core-dev/build/ide/code:commit-73b9682c5040a9fec5a02e066aa48faa635f5ca5",
             "latestImage": "eu.gcr.io/gitpod-core-dev/build/ide/code:nightly"
           },
           "code-desktop": {
@@ -3858,7 +3724,6 @@ data:
             "title": "IntelliJ IDEA",
             "type": "desktop",
             "logo": "https://ide.gitpod.example.com/image/ide-logo/intellijIdeaLogo.svg",
-            "label": "Ultimate",
             "image": "eu.gcr.io/gitpod-core-dev/build/ide/intellij:test",
             "latestImage": "eu.gcr.io/gitpod-core-dev/build/ide/intellij:latest",
             "pluginImage": "eu.gcr.io/gitpod-core-dev/build/ide/jb-backend-plugin:test",
@@ -3895,7 +3760,6 @@ data:
             "title": "PyCharm",
             "type": "desktop",
             "logo": "https://ide.gitpod.example.com/image/ide-logo/pycharmLogo.svg",
-            "label": "Professional",
             "image": "eu.gcr.io/gitpod-core-dev/build/ide/pycharm:test",
             "latestImage": "eu.gcr.io/gitpod-core-dev/build/ide/pycharm:latest",
             "pluginImage": "eu.gcr.io/gitpod-core-dev/build/ide/jb-backend-plugin:test",
@@ -5100,7 +4964,7 @@ metadata:
   namespace: "default"
   labels:
     app.kubernetes.io/name: mysql
-    helm.sh/chart: mysql-9.4.5
+    helm.sh/chart: mysql-9.1.2
     app.kubernetes.io/instance: mysql
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: primary
@@ -5117,7 +4981,7 @@ data:
     datadir=/bitnami/mysql/data
     tmpdir=/opt/bitnami/mysql/tmp
     max_allowed_packet=16M
-    bind-address=*
+    bind-address=0.0.0.0
     pid-file=/opt/bitnami/mysql/tmp/mysqld.pid
     log-error=/opt/bitnami/mysql/logs/mysqld.log
     character-set-server=UTF8
@@ -5175,7 +5039,7 @@ data:
         import ssl_configuration
 
         basicauth bcrypt "Docker Registry" {
-            xwyCGe5U0NAj6Ueiq7N0 JDJhJDEwJFFTRGRRMHZZY2pIS2JqUC9aMDNnVC5CY0M3RDZsVVg0LzBpZmdnTGovT0VVWXoxTG8ud0lX
+            xSedJiDgJQQg4BkW5xKu JDJhJDEwJFFTRGRRMHZZY2pIS2JqUC9aMDNnVC5HbEg2Z1dOQm5TL0pySnpYSm5iNy9DeVh0ZUw2cFM2
         }
 
         reverse_proxy https://registry.default.svc.cluster.local {
@@ -5287,7 +5151,7 @@ metadata:
   namespace: default
   labels:
     app: docker-registry
-    chart: docker-registry-2.2.2
+    chart: docker-registry-1.16.0
     heritage: Helm
     release: docker-registry
 data:
@@ -5446,7 +5310,7 @@ data:
       },
       "oauthServer": {
         "enabled": true,
-        "jwtSecret": "m30EH-M2-cWMgkgdy7pu"
+        "jwtSecret": "8QMIxwyCGe5U0NAj6Uei"
       },
       "rateLimiter": {
         "groups": {
@@ -5512,7 +5376,6 @@ apiVersion: v1
 data:
   config.json: |-
     {
-      "gpRunImage": "registry.hub.docker.com/gitpod/gp-run:latest",
       "supervisorImage": "eu.gcr.io/gitpod-core-dev/build/supervisor:test",
       "ideOptions": {
         "options": {
@@ -5540,7 +5403,7 @@ data:
             "type": "browser",
             "logo": "https://ide.gitpod.example.com/image/ide-logo/vscode.svg",
             "label": "Browser",
-            "image": "eu.gcr.io/gitpod-core-dev/build/ide/code:commit-fdf6a08a681c53ddd97c7bae9acc7d49158a41a0",
+            "image": "eu.gcr.io/gitpod-core-dev/build/ide/code:commit-73b9682c5040a9fec5a02e066aa48faa635f5ca5",
             "latestImage": "eu.gcr.io/gitpod-core-dev/build/ide/code:nightly"
           },
           "code-desktop": {
@@ -5574,7 +5437,6 @@ data:
             "title": "IntelliJ IDEA",
             "type": "desktop",
             "logo": "https://ide.gitpod.example.com/image/ide-logo/intellijIdeaLogo.svg",
-            "label": "Ultimate",
             "image": "eu.gcr.io/gitpod-core-dev/build/ide/intellij:test",
             "latestImage": "eu.gcr.io/gitpod-core-dev/build/ide/intellij:latest",
             "pluginImage": "eu.gcr.io/gitpod-core-dev/build/ide/jb-backend-plugin:test",
@@ -5611,7 +5473,6 @@ data:
             "title": "PyCharm",
             "type": "desktop",
             "logo": "https://ide.gitpod.example.com/image/ide-logo/pycharmLogo.svg",
-            "label": "Professional",
             "image": "eu.gcr.io/gitpod-core-dev/build/ide/pycharm:test",
             "latestImage": "eu.gcr.io/gitpod-core-dev/build/ide/pycharm:latest",
             "pluginImage": "eu.gcr.io/gitpod-core-dev/build/ide/jb-backend-plugin:test",
@@ -5768,20 +5629,24 @@ data:
           "tempDir": "/tmp",
           "storage": {
             "stage": "",
-            "kind": "minio",
+            "kind": "s3",
             "gcloud": {
               "credentialsFile": "",
               "region": "",
               "projectId": ""
             },
             "minio": {
-              "endpoint": "minio.default.svc.cluster.local:9000",
-              "accessKey": "RBji6R0bGG81gyEye25P",
+              "endpoint": "",
+              "accessKey": "",
               "accessKeyFile": "",
-              "secretKey": "tX6ML8gCW31miw0T8QMI",
+              "secretKey": "",
               "secretKeyFile": "",
+              "region": ""
+            },
+            "s3": {
+              "bucket": "s3-bucket",
               "region": "local",
-              "parallelUpload": 6
+              "credentialsFile": "/mnt/secrets/storage/credentials"
             },
             "blobQuota": 5368709120
           },
@@ -5952,20 +5817,24 @@ data:
       "content": {
         "storage": {
           "stage": "",
-          "kind": "minio",
+          "kind": "s3",
           "gcloud": {
             "credentialsFile": "",
             "region": "",
             "projectId": ""
           },
           "minio": {
-            "endpoint": "minio.default.svc.cluster.local:9000",
-            "accessKey": "RBji6R0bGG81gyEye25P",
+            "endpoint": "",
+            "accessKey": "",
             "accessKeyFile": "",
-            "secretKey": "tX6ML8gCW31miw0T8QMI",
+            "secretKey": "",
             "secretKeyFile": "",
+            "region": ""
+          },
+          "s3": {
+            "bucket": "s3-bucket",
             "region": "local",
-            "parallelUpload": 6
+            "credentialsFile": "/mnt/secrets/storage/credentials"
           },
           "blobQuota": 5368709120
         }
@@ -5980,12 +5849,7 @@ data:
         "ratelimits": {}
       },
       "imageBuilderProxy": {
-        "targetAddr": "image-builder-mk3.default.svc.cluster.local:8080",
-        "tls": {
-          "ca": "",
-          "crt": "",
-          "key": ""
-        }
+        "targetAddr": "image-builder-mk3.default.svc.cluster.local:8080"
       },
       "pprof": {
         "addr": "127.0.0.1:6060"
@@ -6115,25 +5979,6 @@ metadata:
   name: ws-proxy
   namespace: default
 ---
-# v1/PersistentVolumeClaim minio
-# Source: minio/charts/minio/templates/pvc.yaml
-kind: PersistentVolumeClaim
-apiVersion: v1
-metadata:
-  name: minio
-  namespace: "default"
-  labels:
-    app.kubernetes.io/name: minio
-    helm.sh/chart: minio-11.10.24
-    app.kubernetes.io/instance: minio
-    app.kubernetes.io/managed-by: Helm
-spec:
-  accessModes:
-    - "ReadWriteOnce"
-  resources:
-    requests:
-      storage: "8Gi"
----
 # v1/PersistentVolumeClaim registry
 # Source: docker-registry/charts/docker-registry/templates/pvc.yaml
 kind: PersistentVolumeClaim
@@ -6143,7 +5988,7 @@ metadata:
   namespace: default
   labels:
     app: registry
-    chart: "docker-registry-2.2.2"
+    chart: "docker-registry-1.16.0"
     release: "docker-registry"
     heritage: "Helm"
 spec:
@@ -6670,7 +6515,7 @@ metadata:
   namespace: "default"
   labels:
     app.kubernetes.io/name: rabbitmq
-    helm.sh/chart: rabbitmq-11.3.0
+    helm.sh/chart: rabbitmq-10.1.1
     app.kubernetes.io/instance: rabbitmq
     app.kubernetes.io/managed-by: Helm
 rules:
@@ -7031,7 +6876,7 @@ metadata:
   namespace: "default"
   labels:
     app.kubernetes.io/name: rabbitmq
-    helm.sh/chart: rabbitmq-11.3.0
+    helm.sh/chart: rabbitmq-10.1.1
     app.kubernetes.io/instance: rabbitmq
     app.kubernetes.io/managed-by: Helm
 subjects:
@@ -7524,7 +7369,7 @@ metadata:
   namespace: "default"
   labels:
     app.kubernetes.io/name: rabbitmq
-    helm.sh/chart: rabbitmq-11.3.0
+    helm.sh/chart: rabbitmq-10.1.1
     app.kubernetes.io/instance: rabbitmq
     app.kubernetes.io/managed-by: Helm
 spec:
@@ -7568,7 +7413,7 @@ metadata:
   namespace: "default"
   labels:
     app.kubernetes.io/name: rabbitmq
-    helm.sh/chart: rabbitmq-11.3.0
+    helm.sh/chart: rabbitmq-10.1.1
     app.kubernetes.io/instance: rabbitmq
     app.kubernetes.io/managed-by: Helm
 spec:
@@ -7594,33 +7439,6 @@ spec:
     app.kubernetes.io/instance: rabbitmq
   publishNotReadyAddresses: true
 ---
-# v1/Service minio
-# Source: minio/charts/minio/templates/service.yaml
-apiVersion: v1
-kind: Service
-metadata:
-  name: minio
-  namespace: "default"
-  labels:
-    app.kubernetes.io/name: minio
-    helm.sh/chart: minio-11.10.24
-    app.kubernetes.io/instance: minio
-    app.kubernetes.io/managed-by: Helm
-spec:
-  type: ClusterIP
-  ports:
-    - name: minio-api
-      port: 9000
-      targetPort: minio-api
-      nodePort: null
-    - name: minio-console
-      port: 9001
-      targetPort: minio-console
-      nodePort: null
-  selector:
-    app.kubernetes.io/name: minio
-    app.kubernetes.io/instance: minio
----
 # v1/Service mysql
 # Source: mysql/charts/mysql/templates/primary/svc.yaml
 apiVersion: v1
@@ -7630,7 +7448,7 @@ metadata:
   namespace: "default"
   labels:
     app.kubernetes.io/name: mysql
-    helm.sh/chart: mysql-9.4.5
+    helm.sh/chart: mysql-9.1.2
     app.kubernetes.io/instance: mysql
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: primary
@@ -7658,10 +7476,11 @@ metadata:
   namespace: "default"
   labels:
     app.kubernetes.io/name: mysql
-    helm.sh/chart: mysql-9.4.5
+    helm.sh/chart: mysql-9.1.2
     app.kubernetes.io/instance: mysql
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: primary
+  annotations:
 spec:
   type: ClusterIP
   clusterIP: None
@@ -7775,7 +7594,7 @@ metadata:
   namespace: default
   labels:
     app: docker-registry
-    chart: docker-registry-2.2.2
+    chart: docker-registry-1.16.0
     release: docker-registry
     heritage: Helm
 spec:
@@ -7838,10 +7657,6 @@ spec:
     port: 9000
     protocol: TCP
     targetPort: 9000
-  - name: session
-    port: 9876
-    protocol: TCP
-    targetPort: 9876
   - name: debug
     port: 6060
     protocol: TCP
@@ -8072,7 +7887,7 @@ spec:
   template:
     metadata:
       annotations:
-        gitpod.io/checksum_config: 3e7db160db71491d8d16b0423783bf99a0dc293dc723960c9308756bdde69d3b
+        gitpod.io/checksum_config: 3e487f9543c719b9ee3f5590a0f98cb535b4bf1b301c66de8f00f3aa9d61381d
       creationTimestamp: null
       labels:
         app: gitpod
@@ -8289,7 +8104,7 @@ spec:
   template:
     metadata:
       annotations:
-        gitpod.io/checksum_config: 2a29ef265c219405bda658cb21613f40ad5e692590d2779476a3ff90917ed6fb
+        gitpod.io/checksum_config: 542b4f17eadb6bf27232678ee42b58f08cc23289ca10890871ada61e76453854
         seccomp.security.alpha.kubernetes.io/shiftfs-module-loader: unconfined
       creationTimestamp: null
       labels:
@@ -8388,6 +8203,9 @@ spec:
           name: tls-certs
         - mountPath: /mnt/sync-tmp
           name: gcloud-tmp
+        - mountPath: /mnt/secrets/storage
+          name: storage-volume
+          readOnly: true
       - args:
         - --logtostderr
         - --insecure-listen-address=[$(IP)]:9500
@@ -8553,6 +8371,9 @@ spec:
           path: /var/gitpod/tmp/backup
           type: DirectoryOrCreate
         name: gcloud-tmp
+      - name: storage-volume
+        secret:
+          secretName: s3-storage
   updateStrategy: {}
 status:
   currentNumberScheduled: 0
@@ -8569,7 +8390,7 @@ metadata:
   namespace: "default"
   labels:
     app.kubernetes.io/name: rabbitmq
-    helm.sh/chart: rabbitmq-11.3.0
+    helm.sh/chart: rabbitmq-10.1.1
     app.kubernetes.io/instance: rabbitmq
     app.kubernetes.io/managed-by: Helm
 spec:
@@ -8586,12 +8407,12 @@ spec:
     metadata:
       labels:
         app.kubernetes.io/name: rabbitmq
-        helm.sh/chart: rabbitmq-11.3.0
+        helm.sh/chart: rabbitmq-10.1.1
         app.kubernetes.io/instance: rabbitmq
         app.kubernetes.io/managed-by: Helm
       annotations:
-        checksum/config: d5780a0c58210a2062d54feb61cfb1d5a9c076f95569c4a77076d22c9bad4190
-        checksum/secret: 64c39dd3a8570ed4b0cc71bc0402bc814d016e16f68732938722b12a57c8e82c
+        checksum/config: 2ca9db593e4ca6cdd01f7a65cce1ae90d0d45ecdf0049edfaa4ec72302fcbe8f
+        checksum/secret: c231bbb08185305defa8c4da0f3ee0f5e7a16795362a2133f74e53eb9a40453d
         prometheus.io/port: '9419'
         prometheus.io/scrape: "true"
     spec:
@@ -8611,7 +8432,7 @@ spec:
       initContainers:
       containers:
         - name: rabbitmq
-          image: docker.io/bitnami/rabbitmq:3.11.5-debian-11-r2
+          image: docker.io/bitnami/rabbitmq:3.10.2-debian-10-r7
           imagePullPolicy: "IfNotPresent"
           securityContext:
             runAsNonRoot: true
@@ -8746,10 +8567,11 @@ spec:
               - key: tls.key
                 path: server_key.pem
         - name: configuration
-          projected:
-            sources:
-              - secret:
-                  name: messagebus-config
+          secret:
+            secretName: messagebus-config
+            items:
+              - key: rabbitmq.conf
+                path: rabbitmq.conf
         - name: load-definition-volume
           secret:
             secretName: "load-definition"
@@ -8765,7 +8587,7 @@ metadata:
   namespace: "default"
   labels:
     app.kubernetes.io/name: mysql
-    helm.sh/chart: mysql-9.4.5
+    helm.sh/chart: mysql-9.1.2
     app.kubernetes.io/instance: mysql
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: primary
@@ -8783,10 +8605,10 @@ spec:
   template:
     metadata:
       annotations:
-        checksum/configuration: 0c1e0d4282c8f8f820f3c9d1d79b3f423c4676afac2e3a6de555f8553f146eb4
+        checksum/configuration: 11b8361c0fbf695cec6ec7f47ed4118ad3c7d71a391ca246df129803d3e205a5
       labels:
         app.kubernetes.io/name: mysql
-        helm.sh/chart: mysql-9.4.5
+        helm.sh/chart: mysql-9.1.2
         app.kubernetes.io/instance: mysql
         app.kubernetes.io/managed-by: Helm
         app.kubernetes.io/component: primary
@@ -8805,7 +8627,7 @@ spec:
         fsGroup: 1001
       initContainers:
         - name: volume-permissions
-          image: docker.io/bitnami/bitnami-shell:11-debian-11-r60
+          image: docker.io/bitnami/bitnami-shell:10-debian-10-r431
           imagePullPolicy: "IfNotPresent"
           command:
             - /bin/bash
@@ -9046,9 +8868,21 @@ spec:
         - configMap:
             name: openvsx-proxy-config
           name: config
-        - emptyDir: {}
-          name: redis-data
   updateStrategy: {}
+  volumeClaimTemplates:
+    - metadata:
+        creationTimestamp: null
+        labels:
+          app: gitpod
+          component: openvsx-proxy
+        name: redis-data
+      spec:
+        accessModes:
+          - ReadWriteOnce
+        resources:
+          requests:
+            storage: 8Gi
+      status: {}
 
 ---
 # apps/v1/Deployment blobserve
@@ -9075,7 +8909,7 @@ spec:
   template:
     metadata:
       annotations:
-        gitpod.io/checksum_config: 0d9d1c68723466a253996f0a96bf0682ce57b89ebcb4ae1e4a643dd788ef1cab
+        gitpod.io/checksum_config: cac138904f08d79e5598805683f8dc378bd52c58348489de22949ac38dd8b193
       creationTimestamp: null
       labels:
         app: gitpod
@@ -9216,7 +9050,7 @@ spec:
   template:
     metadata:
       annotations:
-        gitpod.io/checksum_config: 21ad538d4c7daef6619e5dda6fd71a49a5e5b551f0fc1365d3b7db1d1f38f9ce
+        gitpod.io/checksum_config: 4e8e7593c627eb77122d4ce16e3c2fbbf29c6379c96f9593d3bbd840dd6b870d
       creationTimestamp: null
       labels:
         app: gitpod
@@ -9276,6 +9110,9 @@ spec:
         - mountPath: /config
           name: config
           readOnly: true
+        - mountPath: /mnt/secrets/storage
+          name: storage-volume
+          readOnly: true
       - args:
         - --logtostderr
         - --insecure-listen-address=[$(IP)]:9500
@@ -9309,6 +9146,9 @@ spec:
       - configMap:
           name: content-service
         name: config
+      - name: storage-volume
+        secret:
+          secretName: s3-storage
 status: {}
 ---
 # apps/v1/Deployment dashboard
@@ -9943,7 +9783,7 @@ spec:
   template:
     metadata:
       annotations:
-        gitpod.io/checksum_config: 3b0478b4bb4feb7b7a29bc33bf4ec99671df4dcbd9529778de375c72e78df64c
+        gitpod.io/checksum_config: af26ec864db5be86adfb79b972614487639aa67ad16de869e23e22e468f0bed8
       creationTimestamp: null
       labels:
         app: gitpod
@@ -10069,117 +9909,6 @@ spec:
         name: cacerts
 status: {}
 ---
-# apps/v1/Deployment minio
-# Source: minio/charts/minio/templates/standalone/deployment.yaml
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: minio
-  namespace: "default"
-  labels:
-    app.kubernetes.io/name: minio
-    helm.sh/chart: minio-11.10.24
-    app.kubernetes.io/instance: minio
-    app.kubernetes.io/managed-by: Helm
-spec:
-  selector:
-    matchLabels:
-      app.kubernetes.io/name: minio
-      app.kubernetes.io/instance: minio
-  strategy:
-    type: Recreate
-  template:
-    metadata:
-      labels:
-        app.kubernetes.io/name: minio
-        helm.sh/chart: minio-11.10.24
-        app.kubernetes.io/instance: minio
-        app.kubernetes.io/managed-by: Helm
-      annotations:
-        checksum/credentials-secret: 0f3ceb92b9779df4ce0927f6faeb23e9116b85e0eabe095d903e46a2770cde42
-    spec:
-      
-      serviceAccountName: minio
-      affinity:
-        nodeAffinity:
-          requiredDuringSchedulingIgnoredDuringExecution:
-            nodeSelectorTerms:
-            - matchExpressions:
-              - key: gitpod.io/workload_meta
-                operator: Exists
-        
-      securityContext:
-        fsGroup: 1001
-      containers:
-        - name: minio
-          image: docker.io/bitnami/minio:2022.12.12-debian-11-r0
-          imagePullPolicy: "IfNotPresent"
-          securityContext:
-            runAsNonRoot: true
-            runAsUser: 1001
-          env:
-            - name: BITNAMI_DEBUG
-              value: "false"
-            - name: MINIO_SCHEME
-              value: "http"
-            - name: MINIO_FORCE_NEW_KEYS
-              value: "no"
-            - name: MINIO_ROOT_USER
-              valueFrom:
-                secretKeyRef:
-                  name: minio
-                  key: root-user
-            - name: MINIO_ROOT_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: minio
-                  key: root-password
-            - name: MINIO_BROWSER
-              value: "on"
-            - name: MINIO_PROMETHEUS_AUTH_TYPE
-              value: "public"
-            - name: MINIO_CONSOLE_PORT_NUMBER
-              value: "9001"
-            - name: MINIO_SKIP_CLIENT
-              value: "yes"
-          envFrom:
-          ports:
-            - name: minio-api
-              containerPort: 9000
-              protocol: TCP
-            - name: minio-console
-              containerPort: 9001
-              protocol: TCP
-          livenessProbe:
-            httpGet:
-              path: /minio/health/live
-              port: minio-api
-              scheme: "HTTP"
-            initialDelaySeconds: 5
-            periodSeconds: 5
-            timeoutSeconds: 5
-            successThreshold: 1
-            failureThreshold: 5
-          readinessProbe:
-            tcpSocket:
-              port: minio-api
-            initialDelaySeconds: 5
-            periodSeconds: 5
-            timeoutSeconds: 1
-            successThreshold: 1
-            failureThreshold: 5
-          resources:
-            limits: {}
-            requests:
-              memory: 2Gi
-          volumeMounts:
-            - name: data
-              mountPath: /data
-      volumes:
-        - name: data
-          persistentVolumeClaim:
-            claimName: minio
----
 # apps/v1/Deployment proxy
 apiVersion: apps/v1
 kind: Deployment
@@ -10204,7 +9933,7 @@ spec:
   template:
     metadata:
       annotations:
-        gitpod.io/checksum_config: a7bd71558cb04a04656bafe7651d4192a9d37be96d2d817f9b6225f63e3a6989
+        gitpod.io/checksum_config: c52c73e63eaa95613a8f4fe77167c754cd48eaf757dd69c2048400311a5ae0a6
       creationTimestamp: null
       labels:
         app: gitpod
@@ -10545,7 +10274,7 @@ metadata:
   namespace: default
   labels:
     app: docker-registry
-    chart: docker-registry-2.2.2
+    chart: docker-registry-1.16.0
     release: docker-registry
     heritage: Helm
 spec:
@@ -10561,10 +10290,8 @@ spec:
         app: docker-registry
         release: docker-registry
       annotations:
-        checksum/config: 699dd382179068f3354c330fcce38625e2861d97b962074b4f57005d40497b00
-        checksum/secret: 450f59aeda22415409a87a1abd2c033c08ebd5fb54fe24d3c56560e92b0218f6
-        
-        gitpod.io/checksum_config: 1c66f4ccdb7f6331da2edaecefcb40f6c1b6315c9277eb0418fef3cc584a28bd
+        checksum/config: 1d22b82e19bbc654e029029c4fb86ad02dc13422dc3ac52f8175ad190e52a0bb
+        gitpod.io/checksum_config: 0ce55d51677cd683df3c7a244542c6aeaaf5dd6dca0f0458e8053a713228f535
     spec:
       serviceAccountName: docker-registry
       securityContext:
@@ -10572,7 +10299,7 @@ spec:
         runAsUser: 1000
       containers:
         - name: docker-registry
-          image: "docker.io/library/registry:2.8.1"
+          image: "docker.io/library/registry:2.7.1"
           imagePullPolicy: IfNotPresent
           command:
           - /bin/registry
@@ -10590,9 +10317,9 @@ spec:
               scheme: HTTPS
               path: /
               port: 5000
-          resources: 
+          resources:
             {}
-          env: 
+          env:
             - name: REGISTRY_HTTP_SECRET
               valueFrom:
                 secretKeyRef:
@@ -10604,21 +10331,21 @@ spec:
               value: /etc/ssl/docker/tls.key
             - name: REGISTRY_STORAGE_FILESYSTEM_ROOTDIRECTORY
               value: "/var/lib/registry"
-          volumeMounts: 
-            - name: "registry-config"
-              mountPath: "/etc/docker/registry"
+          volumeMounts:
             - name: data
               mountPath: /var/lib/registry/
+            - name: "registry-config"
+              mountPath: "/etc/docker/registry"
             - mountPath: /etc/ssl/docker
               name: tls-cert
               readOnly: true
-      volumes: 
-        - name: registry-config
-          configMap:
-            name: registry-config
+      volumes:
         - name: data
           persistentVolumeClaim:
             claimName: registry
+        - name: registry-config
+          configMap:
+            name: registry-config
         - name: tls-cert
           secret:
             secretName: builtin-registry-certs
@@ -10647,7 +10374,7 @@ spec:
   template:
     metadata:
       annotations:
-        gitpod.io/checksum_config: f52ae23eddcf2fe15c87ec92cc3d998045c5ff491d52caed0f23a6fccc020134
+        gitpod.io/checksum_config: 726dafd8c59907accd3250e873f40d6e59d6913f82b7198335bc6c24ae2e7db1
       creationTimestamp: null
       labels:
         app: gitpod
@@ -10761,8 +10488,6 @@ spec:
           name: metrics
         - containerPort: 9000
           name: install-admin
-        - containerPort: 9876
-          name: session
         - containerPort: 6060
           name: debug
         - containerPort: 9229
@@ -10928,7 +10653,7 @@ spec:
   template:
     metadata:
       annotations:
-        gitpod.io/checksum_config: 21c3b53bac44cf0f98bc57e43353e3136dc5806409951038c2ba36aea69dd218
+        gitpod.io/checksum_config: 1bd988ed96e0969daaf49975301c9ce7ebbb5d47149400fe56fc52c933c096a3
       creationTimestamp: null
       labels:
         app: gitpod
@@ -10995,6 +10720,9 @@ spec:
         - mountPath: /certs
           name: tls-certs
           readOnly: true
+        - mountPath: /mnt/secrets/storage
+          name: storage-volume
+          readOnly: true
       - args:
         - --logtostderr
         - --insecure-listen-address=[$(IP)]:9500
@@ -11037,6 +10765,9 @@ spec:
       - name: tls-certs
         secret:
           secretName: ws-manager-tls
+      - name: storage-volume
+        secret:
+          secretName: s3-storage
 status: {}
 ---
 # apps/v1/Deployment ws-manager-bridge
