@@ -41,6 +41,17 @@ export const WorkspacesService = {
       kind: MethodKind.Unary,
     },
     /**
+     * WorkspaceStatusUpdate returns workspace status once it changed.
+     *
+     * @generated from rpc gitpod.experimental.v1.WorkspacesService.WorkspaceStatusUpdate
+     */
+    workspaceStatusUpdate: {
+      name: "WorkspaceStatusUpdate",
+      I: WorkspaceStatusUpdateRequest,
+      O: WorkspaceStatusUpdateResponse,
+      kind: MethodKind.ServerStreaming,
+    },
+    /**
      * GetOwnerToken returns an owner token.
      *
      * @generated from rpc gitpod.experimental.v1.WorkspacesService.GetOwnerToken

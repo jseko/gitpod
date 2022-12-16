@@ -427,6 +427,100 @@ func (x *GetWorkspaceResponse) GetResult() *Workspace {
 	return nil
 }
 
+type WorkspaceStatusUpdateRequest struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	WorkspaceId string `protobuf:"bytes,1,opt,name=workspace_id,json=workspaceId,proto3" json:"workspace_id,omitempty"`
+}
+
+func (x *WorkspaceStatusUpdateRequest) Reset() {
+	*x = WorkspaceStatusUpdateRequest{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_gitpod_experimental_v1_workspaces_proto_msgTypes[4]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *WorkspaceStatusUpdateRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*WorkspaceStatusUpdateRequest) ProtoMessage() {}
+
+func (x *WorkspaceStatusUpdateRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_gitpod_experimental_v1_workspaces_proto_msgTypes[4]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use WorkspaceStatusUpdateRequest.ProtoReflect.Descriptor instead.
+func (*WorkspaceStatusUpdateRequest) Descriptor() ([]byte, []int) {
+	return file_gitpod_experimental_v1_workspaces_proto_rawDescGZIP(), []int{4}
+}
+
+func (x *WorkspaceStatusUpdateRequest) GetWorkspaceId() string {
+	if x != nil {
+		return x.WorkspaceId
+	}
+	return ""
+}
+
+type WorkspaceStatusUpdateResponse struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Result *WorkspaceStatus `protobuf:"bytes,1,opt,name=result,proto3" json:"result,omitempty"`
+}
+
+func (x *WorkspaceStatusUpdateResponse) Reset() {
+	*x = WorkspaceStatusUpdateResponse{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_gitpod_experimental_v1_workspaces_proto_msgTypes[5]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *WorkspaceStatusUpdateResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*WorkspaceStatusUpdateResponse) ProtoMessage() {}
+
+func (x *WorkspaceStatusUpdateResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_gitpod_experimental_v1_workspaces_proto_msgTypes[5]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use WorkspaceStatusUpdateResponse.ProtoReflect.Descriptor instead.
+func (*WorkspaceStatusUpdateResponse) Descriptor() ([]byte, []int) {
+	return file_gitpod_experimental_v1_workspaces_proto_rawDescGZIP(), []int{5}
+}
+
+func (x *WorkspaceStatusUpdateResponse) GetResult() *WorkspaceStatus {
+	if x != nil {
+		return x.Result
+	}
+	return nil
+}
+
 type GetOwnerTokenRequest struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
@@ -438,7 +532,7 @@ type GetOwnerTokenRequest struct {
 func (x *GetOwnerTokenRequest) Reset() {
 	*x = GetOwnerTokenRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_gitpod_experimental_v1_workspaces_proto_msgTypes[4]
+		mi := &file_gitpod_experimental_v1_workspaces_proto_msgTypes[6]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -451,7 +545,7 @@ func (x *GetOwnerTokenRequest) String() string {
 func (*GetOwnerTokenRequest) ProtoMessage() {}
 
 func (x *GetOwnerTokenRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_gitpod_experimental_v1_workspaces_proto_msgTypes[4]
+	mi := &file_gitpod_experimental_v1_workspaces_proto_msgTypes[6]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -464,7 +558,7 @@ func (x *GetOwnerTokenRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetOwnerTokenRequest.ProtoReflect.Descriptor instead.
 func (*GetOwnerTokenRequest) Descriptor() ([]byte, []int) {
-	return file_gitpod_experimental_v1_workspaces_proto_rawDescGZIP(), []int{4}
+	return file_gitpod_experimental_v1_workspaces_proto_rawDescGZIP(), []int{6}
 }
 
 func (x *GetOwnerTokenRequest) GetWorkspaceId() string {
@@ -485,7 +579,7 @@ type GetOwnerTokenResponse struct {
 func (x *GetOwnerTokenResponse) Reset() {
 	*x = GetOwnerTokenResponse{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_gitpod_experimental_v1_workspaces_proto_msgTypes[5]
+		mi := &file_gitpod_experimental_v1_workspaces_proto_msgTypes[7]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -498,7 +592,7 @@ func (x *GetOwnerTokenResponse) String() string {
 func (*GetOwnerTokenResponse) ProtoMessage() {}
 
 func (x *GetOwnerTokenResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_gitpod_experimental_v1_workspaces_proto_msgTypes[5]
+	mi := &file_gitpod_experimental_v1_workspaces_proto_msgTypes[7]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -511,7 +605,7 @@ func (x *GetOwnerTokenResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetOwnerTokenResponse.ProtoReflect.Descriptor instead.
 func (*GetOwnerTokenResponse) Descriptor() ([]byte, []int) {
-	return file_gitpod_experimental_v1_workspaces_proto_rawDescGZIP(), []int{5}
+	return file_gitpod_experimental_v1_workspaces_proto_rawDescGZIP(), []int{7}
 }
 
 func (x *GetOwnerTokenResponse) GetToken() string {
@@ -538,7 +632,7 @@ type CreateAndStartWorkspaceRequest struct {
 func (x *CreateAndStartWorkspaceRequest) Reset() {
 	*x = CreateAndStartWorkspaceRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_gitpod_experimental_v1_workspaces_proto_msgTypes[6]
+		mi := &file_gitpod_experimental_v1_workspaces_proto_msgTypes[8]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -551,7 +645,7 @@ func (x *CreateAndStartWorkspaceRequest) String() string {
 func (*CreateAndStartWorkspaceRequest) ProtoMessage() {}
 
 func (x *CreateAndStartWorkspaceRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_gitpod_experimental_v1_workspaces_proto_msgTypes[6]
+	mi := &file_gitpod_experimental_v1_workspaces_proto_msgTypes[8]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -564,7 +658,7 @@ func (x *CreateAndStartWorkspaceRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CreateAndStartWorkspaceRequest.ProtoReflect.Descriptor instead.
 func (*CreateAndStartWorkspaceRequest) Descriptor() ([]byte, []int) {
-	return file_gitpod_experimental_v1_workspaces_proto_rawDescGZIP(), []int{6}
+	return file_gitpod_experimental_v1_workspaces_proto_rawDescGZIP(), []int{8}
 }
 
 func (x *CreateAndStartWorkspaceRequest) GetIdempotencyToken() string {
@@ -629,7 +723,7 @@ type CreateAndStartWorkspaceResponse struct {
 func (x *CreateAndStartWorkspaceResponse) Reset() {
 	*x = CreateAndStartWorkspaceResponse{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_gitpod_experimental_v1_workspaces_proto_msgTypes[7]
+		mi := &file_gitpod_experimental_v1_workspaces_proto_msgTypes[9]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -642,7 +736,7 @@ func (x *CreateAndStartWorkspaceResponse) String() string {
 func (*CreateAndStartWorkspaceResponse) ProtoMessage() {}
 
 func (x *CreateAndStartWorkspaceResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_gitpod_experimental_v1_workspaces_proto_msgTypes[7]
+	mi := &file_gitpod_experimental_v1_workspaces_proto_msgTypes[9]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -655,7 +749,7 @@ func (x *CreateAndStartWorkspaceResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CreateAndStartWorkspaceResponse.ProtoReflect.Descriptor instead.
 func (*CreateAndStartWorkspaceResponse) Descriptor() ([]byte, []int) {
-	return file_gitpod_experimental_v1_workspaces_proto_rawDescGZIP(), []int{7}
+	return file_gitpod_experimental_v1_workspaces_proto_rawDescGZIP(), []int{9}
 }
 
 func (x *CreateAndStartWorkspaceResponse) GetWorkspaceId() string {
@@ -678,7 +772,7 @@ type StartWorkspaceRequest struct {
 func (x *StartWorkspaceRequest) Reset() {
 	*x = StartWorkspaceRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_gitpod_experimental_v1_workspaces_proto_msgTypes[8]
+		mi := &file_gitpod_experimental_v1_workspaces_proto_msgTypes[10]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -691,7 +785,7 @@ func (x *StartWorkspaceRequest) String() string {
 func (*StartWorkspaceRequest) ProtoMessage() {}
 
 func (x *StartWorkspaceRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_gitpod_experimental_v1_workspaces_proto_msgTypes[8]
+	mi := &file_gitpod_experimental_v1_workspaces_proto_msgTypes[10]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -704,7 +798,7 @@ func (x *StartWorkspaceRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use StartWorkspaceRequest.ProtoReflect.Descriptor instead.
 func (*StartWorkspaceRequest) Descriptor() ([]byte, []int) {
-	return file_gitpod_experimental_v1_workspaces_proto_rawDescGZIP(), []int{8}
+	return file_gitpod_experimental_v1_workspaces_proto_rawDescGZIP(), []int{10}
 }
 
 func (x *StartWorkspaceRequest) GetIdempotencyToken() string {
@@ -740,7 +834,7 @@ type StartWorkspaceResponse struct {
 func (x *StartWorkspaceResponse) Reset() {
 	*x = StartWorkspaceResponse{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_gitpod_experimental_v1_workspaces_proto_msgTypes[9]
+		mi := &file_gitpod_experimental_v1_workspaces_proto_msgTypes[11]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -753,7 +847,7 @@ func (x *StartWorkspaceResponse) String() string {
 func (*StartWorkspaceResponse) ProtoMessage() {}
 
 func (x *StartWorkspaceResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_gitpod_experimental_v1_workspaces_proto_msgTypes[9]
+	mi := &file_gitpod_experimental_v1_workspaces_proto_msgTypes[11]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -766,7 +860,7 @@ func (x *StartWorkspaceResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use StartWorkspaceResponse.ProtoReflect.Descriptor instead.
 func (*StartWorkspaceResponse) Descriptor() ([]byte, []int) {
-	return file_gitpod_experimental_v1_workspaces_proto_rawDescGZIP(), []int{9}
+	return file_gitpod_experimental_v1_workspaces_proto_rawDescGZIP(), []int{11}
 }
 
 func (x *StartWorkspaceResponse) GetInstanceId() string {
@@ -794,7 +888,7 @@ type StopWorkspaceRequest struct {
 func (x *StopWorkspaceRequest) Reset() {
 	*x = StopWorkspaceRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_gitpod_experimental_v1_workspaces_proto_msgTypes[10]
+		mi := &file_gitpod_experimental_v1_workspaces_proto_msgTypes[12]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -807,7 +901,7 @@ func (x *StopWorkspaceRequest) String() string {
 func (*StopWorkspaceRequest) ProtoMessage() {}
 
 func (x *StopWorkspaceRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_gitpod_experimental_v1_workspaces_proto_msgTypes[10]
+	mi := &file_gitpod_experimental_v1_workspaces_proto_msgTypes[12]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -820,7 +914,7 @@ func (x *StopWorkspaceRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use StopWorkspaceRequest.ProtoReflect.Descriptor instead.
 func (*StopWorkspaceRequest) Descriptor() ([]byte, []int) {
-	return file_gitpod_experimental_v1_workspaces_proto_rawDescGZIP(), []int{10}
+	return file_gitpod_experimental_v1_workspaces_proto_rawDescGZIP(), []int{12}
 }
 
 func (x *StopWorkspaceRequest) GetWorkspaceId() string {
@@ -839,7 +933,7 @@ type StopWorkspaceResponse struct {
 func (x *StopWorkspaceResponse) Reset() {
 	*x = StopWorkspaceResponse{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_gitpod_experimental_v1_workspaces_proto_msgTypes[11]
+		mi := &file_gitpod_experimental_v1_workspaces_proto_msgTypes[13]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -852,7 +946,7 @@ func (x *StopWorkspaceResponse) String() string {
 func (*StopWorkspaceResponse) ProtoMessage() {}
 
 func (x *StopWorkspaceResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_gitpod_experimental_v1_workspaces_proto_msgTypes[11]
+	mi := &file_gitpod_experimental_v1_workspaces_proto_msgTypes[13]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -865,7 +959,7 @@ func (x *StopWorkspaceResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use StopWorkspaceResponse.ProtoReflect.Descriptor instead.
 func (*StopWorkspaceResponse) Descriptor() ([]byte, []int) {
-	return file_gitpod_experimental_v1_workspaces_proto_rawDescGZIP(), []int{11}
+	return file_gitpod_experimental_v1_workspaces_proto_rawDescGZIP(), []int{13}
 }
 
 type DeleteWorkspaceRequest struct {
@@ -1919,50 +2013,18 @@ var file_gitpod_experimental_v1_workspaces_proto_rawDesc = []byte{
 	0x01, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x21, 0x2e, 0x67, 0x69, 0x74, 0x70, 0x6f, 0x64, 0x2e, 0x65,
 	0x78, 0x70, 0x65, 0x72, 0x69, 0x6d, 0x65, 0x6e, 0x74, 0x61, 0x6c, 0x2e, 0x76, 0x31, 0x2e, 0x57,
 	0x6f, 0x72, 0x6b, 0x73, 0x70, 0x61, 0x63, 0x65, 0x52, 0x06, 0x72, 0x65, 0x73, 0x75, 0x6c, 0x74,
-	0x22, 0x39, 0x0a, 0x14, 0x47, 0x65, 0x74, 0x4f, 0x77, 0x6e, 0x65, 0x72, 0x54, 0x6f, 0x6b, 0x65,
-	0x6e, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x21, 0x0a, 0x0c, 0x77, 0x6f, 0x72, 0x6b,
-	0x73, 0x70, 0x61, 0x63, 0x65, 0x5f, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x0b,
-	0x77, 0x6f, 0x72, 0x6b, 0x73, 0x70, 0x61, 0x63, 0x65, 0x49, 0x64, 0x22, 0x2d, 0x0a, 0x15, 0x47,
-	0x65, 0x74, 0x4f, 0x77, 0x6e, 0x65, 0x72, 0x54, 0x6f, 0x6b, 0x65, 0x6e, 0x52, 0x65, 0x73, 0x70,
-	0x6f, 0x6e, 0x73, 0x65, 0x12, 0x14, 0x0a, 0x05, 0x74, 0x6f, 0x6b, 0x65, 0x6e, 0x18, 0x01, 0x20,
-	0x01, 0x28, 0x09, 0x52, 0x05, 0x74, 0x6f, 0x6b, 0x65, 0x6e, 0x22, 0xe8, 0x01, 0x0a, 0x1e, 0x43,
-	0x72, 0x65, 0x61, 0x74, 0x65, 0x41, 0x6e, 0x64, 0x53, 0x74, 0x61, 0x72, 0x74, 0x57, 0x6f, 0x72,
-	0x6b, 0x73, 0x70, 0x61, 0x63, 0x65, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x2b, 0x0a,
-	0x11, 0x69, 0x64, 0x65, 0x6d, 0x70, 0x6f, 0x74, 0x65, 0x6e, 0x63, 0x79, 0x5f, 0x74, 0x6f, 0x6b,
-	0x65, 0x6e, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x10, 0x69, 0x64, 0x65, 0x6d, 0x70, 0x6f,
-	0x74, 0x65, 0x6e, 0x63, 0x79, 0x54, 0x6f, 0x6b, 0x65, 0x6e, 0x12, 0x21, 0x0a, 0x0b, 0x63, 0x6f,
-	0x6e, 0x74, 0x65, 0x78, 0x74, 0x5f, 0x75, 0x72, 0x6c, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x48,
-	0x00, 0x52, 0x0a, 0x63, 0x6f, 0x6e, 0x74, 0x65, 0x78, 0x74, 0x55, 0x72, 0x6c, 0x12, 0x21, 0x0a,
-	0x0b, 0x70, 0x72, 0x65, 0x62, 0x75, 0x69, 0x6c, 0x64, 0x5f, 0x69, 0x64, 0x18, 0x03, 0x20, 0x01,
-	0x28, 0x09, 0x48, 0x00, 0x52, 0x0a, 0x70, 0x72, 0x65, 0x62, 0x75, 0x69, 0x6c, 0x64, 0x49, 0x64,
-	0x12, 0x49, 0x0a, 0x0a, 0x73, 0x74, 0x61, 0x72, 0x74, 0x5f, 0x73, 0x70, 0x65, 0x63, 0x18, 0x05,
-	0x20, 0x01, 0x28, 0x0b, 0x32, 0x2a, 0x2e, 0x67, 0x69, 0x74, 0x70, 0x6f, 0x64, 0x2e, 0x65, 0x78,
-	0x70, 0x65, 0x72, 0x69, 0x6d, 0x65, 0x6e, 0x74, 0x61, 0x6c, 0x2e, 0x76, 0x31, 0x2e, 0x53, 0x74,
-	0x61, 0x72, 0x74, 0x57, 0x6f, 0x72, 0x6b, 0x73, 0x70, 0x61, 0x63, 0x65, 0x53, 0x70, 0x65, 0x63,
-	0x52, 0x09, 0x73, 0x74, 0x61, 0x72, 0x74, 0x53, 0x70, 0x65, 0x63, 0x42, 0x08, 0x0a, 0x06, 0x73,
-	0x6f, 0x75, 0x72, 0x63, 0x65, 0x22, 0x44, 0x0a, 0x1f, 0x43, 0x72, 0x65, 0x61, 0x74, 0x65, 0x41,
-	0x6e, 0x64, 0x53, 0x74, 0x61, 0x72, 0x74, 0x57, 0x6f, 0x72, 0x6b, 0x73, 0x70, 0x61, 0x63, 0x65,
-	0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x21, 0x0a, 0x0c, 0x77, 0x6f, 0x72, 0x6b,
-	0x73, 0x70, 0x61, 0x63, 0x65, 0x5f, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x0b,
-	0x77, 0x6f, 0x72, 0x6b, 0x73, 0x70, 0x61, 0x63, 0x65, 0x49, 0x64, 0x22, 0xa7, 0x01, 0x0a, 0x15,
-	0x53, 0x74, 0x61, 0x72, 0x74, 0x57, 0x6f, 0x72, 0x6b, 0x73, 0x70, 0x61, 0x63, 0x65, 0x52, 0x65,
-	0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x2b, 0x0a, 0x11, 0x69, 0x64, 0x65, 0x6d, 0x70, 0x6f, 0x74,
-	0x65, 0x6e, 0x63, 0x79, 0x5f, 0x74, 0x6f, 0x6b, 0x65, 0x6e, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09,
-	0x52, 0x10, 0x69, 0x64, 0x65, 0x6d, 0x70, 0x6f, 0x74, 0x65, 0x6e, 0x63, 0x79, 0x54, 0x6f, 0x6b,
-	0x65, 0x6e, 0x12, 0x21, 0x0a, 0x0c, 0x77, 0x6f, 0x72, 0x6b, 0x73, 0x70, 0x61, 0x63, 0x65, 0x5f,
-	0x69, 0x64, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x0b, 0x77, 0x6f, 0x72, 0x6b, 0x73, 0x70,
-	0x61, 0x63, 0x65, 0x49, 0x64, 0x12, 0x3e, 0x0a, 0x04, 0x73, 0x70, 0x65, 0x63, 0x18, 0x03, 0x20,
-	0x01, 0x28, 0x0b, 0x32, 0x2a, 0x2e, 0x67, 0x69, 0x74, 0x70, 0x6f, 0x64, 0x2e, 0x65, 0x78, 0x70,
-	0x65, 0x72, 0x69, 0x6d, 0x65, 0x6e, 0x74, 0x61, 0x6c, 0x2e, 0x76, 0x31, 0x2e, 0x53, 0x74, 0x61,
-	0x72, 0x74, 0x57, 0x6f, 0x72, 0x6b, 0x73, 0x70, 0x61, 0x63, 0x65, 0x53, 0x70, 0x65, 0x63, 0x52,
-	0x04, 0x73, 0x70, 0x65, 0x63, 0x22, 0x5e, 0x0a, 0x16, 0x53, 0x74, 0x61, 0x72, 0x74, 0x57, 0x6f,
-	0x72, 0x6b, 0x73, 0x70, 0x61, 0x63, 0x65, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12,
-	0x1f, 0x0a, 0x0b, 0x69, 0x6e, 0x73, 0x74, 0x61, 0x6e, 0x63, 0x65, 0x5f, 0x69, 0x64, 0x18, 0x01,
-	0x20, 0x01, 0x28, 0x09, 0x52, 0x0a, 0x69, 0x6e, 0x73, 0x74, 0x61, 0x6e, 0x63, 0x65, 0x49, 0x64,
-	0x12, 0x23, 0x0a, 0x0d, 0x77, 0x6f, 0x72, 0x6b, 0x73, 0x70, 0x61, 0x63, 0x65, 0x5f, 0x75, 0x72,
-	0x6c, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x0c, 0x77, 0x6f, 0x72, 0x6b, 0x73, 0x70, 0x61,
-	0x63, 0x65, 0x55, 0x72, 0x6c, 0x22, 0x39, 0x0a, 0x14, 0x53, 0x74, 0x6f, 0x70, 0x57, 0x6f, 0x72,
-	0x6b, 0x73, 0x70, 0x61, 0x63, 0x65, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x21, 0x0a,
+	0x22, 0x41, 0x0a, 0x1c, 0x57, 0x6f, 0x72, 0x6b, 0x73, 0x70, 0x61, 0x63, 0x65, 0x53, 0x74, 0x61,
+	0x74, 0x75, 0x73, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74,
+	0x12, 0x21, 0x0a, 0x0c, 0x77, 0x6f, 0x72, 0x6b, 0x73, 0x70, 0x61, 0x63, 0x65, 0x5f, 0x69, 0x64,
+	0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x0b, 0x77, 0x6f, 0x72, 0x6b, 0x73, 0x70, 0x61, 0x63,
+	0x65, 0x49, 0x64, 0x22, 0x60, 0x0a, 0x1d, 0x57, 0x6f, 0x72, 0x6b, 0x73, 0x70, 0x61, 0x63, 0x65,
+	0x53, 0x74, 0x61, 0x74, 0x75, 0x73, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x52, 0x65, 0x73, 0x70,
+	0x6f, 0x6e, 0x73, 0x65, 0x12, 0x3f, 0x0a, 0x06, 0x72, 0x65, 0x73, 0x75, 0x6c, 0x74, 0x18, 0x01,
+	0x20, 0x01, 0x28, 0x0b, 0x32, 0x27, 0x2e, 0x67, 0x69, 0x74, 0x70, 0x6f, 0x64, 0x2e, 0x65, 0x78,
+	0x70, 0x65, 0x72, 0x69, 0x6d, 0x65, 0x6e, 0x74, 0x61, 0x6c, 0x2e, 0x76, 0x31, 0x2e, 0x57, 0x6f,
+	0x72, 0x6b, 0x73, 0x70, 0x61, 0x63, 0x65, 0x53, 0x74, 0x61, 0x74, 0x75, 0x73, 0x52, 0x06, 0x72,
+	0x65, 0x73, 0x75, 0x6c, 0x74, 0x22, 0x39, 0x0a, 0x14, 0x47, 0x65, 0x74, 0x4f, 0x77, 0x6e, 0x65,
+	0x72, 0x54, 0x6f, 0x6b, 0x65, 0x6e, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x21, 0x0a,
 	0x0c, 0x77, 0x6f, 0x72, 0x6b, 0x73, 0x70, 0x61, 0x63, 0x65, 0x5f, 0x69, 0x64, 0x18, 0x01, 0x20,
 	0x01, 0x28, 0x09, 0x52, 0x0b, 0x77, 0x6f, 0x72, 0x6b, 0x73, 0x70, 0x61, 0x63, 0x65, 0x49, 0x64,
 	0x22, 0x17, 0x0a, 0x15, 0x53, 0x74, 0x6f, 0x70, 0x57, 0x6f, 0x72, 0x6b, 0x73, 0x70, 0x61, 0x63,
@@ -2341,7 +2403,7 @@ func file_gitpod_experimental_v1_workspaces_proto_init() {
 			}
 		}
 		file_gitpod_experimental_v1_workspaces_proto_msgTypes[4].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*GetOwnerTokenRequest); i {
+			switch v := v.(*WorkspaceStatusUpdateRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -2353,7 +2415,7 @@ func file_gitpod_experimental_v1_workspaces_proto_init() {
 			}
 		}
 		file_gitpod_experimental_v1_workspaces_proto_msgTypes[5].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*GetOwnerTokenResponse); i {
+			switch v := v.(*WorkspaceStatusUpdateResponse); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -2365,7 +2427,7 @@ func file_gitpod_experimental_v1_workspaces_proto_init() {
 			}
 		}
 		file_gitpod_experimental_v1_workspaces_proto_msgTypes[6].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*CreateAndStartWorkspaceRequest); i {
+			switch v := v.(*GetOwnerTokenRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -2377,7 +2439,7 @@ func file_gitpod_experimental_v1_workspaces_proto_init() {
 			}
 		}
 		file_gitpod_experimental_v1_workspaces_proto_msgTypes[7].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*CreateAndStartWorkspaceResponse); i {
+			switch v := v.(*GetOwnerTokenResponse); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -2389,7 +2451,7 @@ func file_gitpod_experimental_v1_workspaces_proto_init() {
 			}
 		}
 		file_gitpod_experimental_v1_workspaces_proto_msgTypes[8].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*StartWorkspaceRequest); i {
+			switch v := v.(*CreateAndStartWorkspaceRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -2401,7 +2463,7 @@ func file_gitpod_experimental_v1_workspaces_proto_init() {
 			}
 		}
 		file_gitpod_experimental_v1_workspaces_proto_msgTypes[9].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*StartWorkspaceResponse); i {
+			switch v := v.(*CreateAndStartWorkspaceResponse); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -2413,7 +2475,7 @@ func file_gitpod_experimental_v1_workspaces_proto_init() {
 			}
 		}
 		file_gitpod_experimental_v1_workspaces_proto_msgTypes[10].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*StopWorkspaceRequest); i {
+			switch v := v.(*StartWorkspaceRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -2425,7 +2487,7 @@ func file_gitpod_experimental_v1_workspaces_proto_init() {
 			}
 		}
 		file_gitpod_experimental_v1_workspaces_proto_msgTypes[11].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*StopWorkspaceResponse); i {
+			switch v := v.(*StartWorkspaceResponse); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -2629,7 +2691,7 @@ func file_gitpod_experimental_v1_workspaces_proto_init() {
 			}
 		}
 	}
-	file_gitpod_experimental_v1_workspaces_proto_msgTypes[6].OneofWrappers = []interface{}{
+	file_gitpod_experimental_v1_workspaces_proto_msgTypes[8].OneofWrappers = []interface{}{
 		(*CreateAndStartWorkspaceRequest_ContextUrl)(nil),
 		(*CreateAndStartWorkspaceRequest_PrebuildId)(nil),
 	}
