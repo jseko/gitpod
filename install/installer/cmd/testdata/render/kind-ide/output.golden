@@ -327,7 +327,7 @@ metadata:
   namespace: default
   labels:
     app: docker-registry
-    chart: docker-registry-2.2.2
+    chart: docker-registry-1.16.0
     heritage: Helm
     release: docker-registry
 type: Opaque
@@ -385,6 +385,10 @@ data:
               }
             ],
             "inlineStatic": [
+              {
+                "search": "window.location.origin;",
+                "replacement": "'${ide}';"
+              },
               {
                 "search": "${window.location.origin}",
                 "replacement": "."
@@ -1185,7 +1189,7 @@ data:
       creationTimestamp: null
       labels:
         app: docker-registry
-        chart: docker-registry-2.2.2
+        chart: docker-registry-1.16.0
         heritage: Helm
         release: docker-registry
       name: registry-secret
@@ -1197,7 +1201,7 @@ data:
       creationTimestamp: null
       labels:
         app: docker-registry
-        chart: docker-registry-2.2.2
+        chart: docker-registry-1.16.0
         heritage: Helm
         release: docker-registry
       name: registry-config
@@ -1209,7 +1213,7 @@ data:
       creationTimestamp: null
       labels:
         app: registry
-        chart: docker-registry-2.2.2
+        chart: docker-registry-1.16.0
         heritage: Helm
         release: docker-registry
       name: registry
@@ -1221,7 +1225,7 @@ data:
       creationTimestamp: null
       labels:
         app: docker-registry
-        chart: docker-registry-2.2.2
+        chart: docker-registry-1.16.0
         heritage: Helm
         release: docker-registry
       name: registry
@@ -1233,7 +1237,7 @@ data:
       creationTimestamp: null
       labels:
         app: docker-registry
-        chart: docker-registry-2.2.2
+        chart: docker-registry-1.16.0
         heritage: Helm
         release: docker-registry
       name: registry
@@ -1263,7 +1267,7 @@ apiVersion: v1
 data:
   config.json: |-
     {
-      "gpRunImage": "registry.hub.docker.com/gitpod/gp-run:latest",
+      "gpRunImage": "registry.hub.docker.com/gitpod/gp-run:ak-test",
       "supervisorImage": "eu.gcr.io/gitpod-core-dev/build/supervisor:test",
       "ideOptions": {
         "options": {
@@ -2552,7 +2556,7 @@ metadata:
   namespace: default
   labels:
     app: docker-registry
-    chart: docker-registry-2.2.2
+    chart: docker-registry-1.16.0
     heritage: Helm
     release: docker-registry
 data:
@@ -2585,7 +2589,7 @@ apiVersion: v1
 data:
   config.json: |-
     {
-      "gpRunImage": "registry.hub.docker.com/gitpod/gp-run:latest",
+      "gpRunImage": "registry.hub.docker.com/gitpod/gp-run:ak-test",
       "supervisorImage": "eu.gcr.io/gitpod-core-dev/build/supervisor:test",
       "ideOptions": {
         "options": {
@@ -2811,7 +2815,7 @@ metadata:
   namespace: default
   labels:
     app: registry
-    chart: "docker-registry-2.2.2"
+    chart: "docker-registry-1.16.0"
     release: "docker-registry"
     heritage: "Helm"
 spec:
@@ -3224,7 +3228,7 @@ metadata:
   namespace: default
   labels:
     app: docker-registry
-    chart: docker-registry-2.2.2
+    chart: docker-registry-1.16.0
     release: docker-registry
     heritage: Helm
 spec:
@@ -3410,7 +3414,7 @@ spec:
   template:
     metadata:
       annotations:
-        gitpod.io/checksum_config: 0d9d1c68723466a253996f0a96bf0682ce57b89ebcb4ae1e4a643dd788ef1cab
+        gitpod.io/checksum_config: 4ef10d5efbf848826fd32a67c8ae990b45cdbab8abf649101c143908aceee122
       creationTimestamp: null
       labels:
         app: gitpod
@@ -3864,7 +3868,7 @@ metadata:
   namespace: default
   labels:
     app: docker-registry
-    chart: docker-registry-2.2.2
+    chart: docker-registry-1.16.0
     release: docker-registry
     heritage: Helm
 spec:
@@ -3880,9 +3884,7 @@ spec:
         app: docker-registry
         release: docker-registry
       annotations:
-        checksum/config: 699dd382179068f3354c330fcce38625e2861d97b962074b4f57005d40497b00
-        checksum/secret: 6fe5d819b2ea20bf72ad31384d4886d6f64dd1f0d237703ac3aff11c1e0737fd
-        
+        checksum/config: 1d22b82e19bbc654e029029c4fb86ad02dc13422dc3ac52f8175ad190e52a0bb
         gitpod.io/checksum_config: 1c66f4ccdb7f6331da2edaecefcb40f6c1b6315c9277eb0418fef3cc584a28bd
     spec:
       serviceAccountName: docker-registry
@@ -3891,7 +3893,7 @@ spec:
         runAsUser: 1000
       containers:
         - name: docker-registry
-          image: "docker.io/library/registry:2.8.1"
+          image: "docker.io/library/registry:2.7.1"
           imagePullPolicy: IfNotPresent
           command:
           - /bin/registry
@@ -3909,9 +3911,9 @@ spec:
               scheme: HTTPS
               path: /
               port: 5000
-          resources: 
+          resources:
             {}
-          env: 
+          env:
             - name: REGISTRY_HTTP_SECRET
               valueFrom:
                 secretKeyRef:
@@ -3923,21 +3925,21 @@ spec:
               value: /etc/ssl/docker/tls.key
             - name: REGISTRY_STORAGE_FILESYSTEM_ROOTDIRECTORY
               value: "/var/lib/registry"
-          volumeMounts: 
-            - name: "registry-config"
-              mountPath: "/etc/docker/registry"
+          volumeMounts:
             - name: data
               mountPath: /var/lib/registry/
+            - name: "registry-config"
+              mountPath: "/etc/docker/registry"
             - mountPath: /etc/ssl/docker
               name: tls-cert
               readOnly: true
-      volumes: 
-        - name: registry-config
-          configMap:
-            name: registry-config
+      volumes:
         - name: data
           persistentVolumeClaim:
             claimName: registry
+        - name: registry-config
+          configMap:
+            name: registry-config
         - name: tls-cert
           secret:
             secretName: builtin-registry-certs
