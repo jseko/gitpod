@@ -427,7 +427,7 @@ func (x *GetWorkspaceResponse) GetResult() *Workspace {
 	return nil
 }
 
-type WorkspaceStatusUpdateRequest struct {
+type StreamWorkspaceStatusRequest struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
@@ -435,8 +435,8 @@ type WorkspaceStatusUpdateRequest struct {
 	WorkspaceId string `protobuf:"bytes,1,opt,name=workspace_id,json=workspaceId,proto3" json:"workspace_id,omitempty"`
 }
 
-func (x *WorkspaceStatusUpdateRequest) Reset() {
-	*x = WorkspaceStatusUpdateRequest{}
+func (x *StreamWorkspaceStatusRequest) Reset() {
+	*x = StreamWorkspaceStatusRequest{}
 	if protoimpl.UnsafeEnabled {
 		mi := &file_gitpod_experimental_v1_workspaces_proto_msgTypes[4]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -444,13 +444,13 @@ func (x *WorkspaceStatusUpdateRequest) Reset() {
 	}
 }
 
-func (x *WorkspaceStatusUpdateRequest) String() string {
+func (x *StreamWorkspaceStatusRequest) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*WorkspaceStatusUpdateRequest) ProtoMessage() {}
+func (*StreamWorkspaceStatusRequest) ProtoMessage() {}
 
-func (x *WorkspaceStatusUpdateRequest) ProtoReflect() protoreflect.Message {
+func (x *StreamWorkspaceStatusRequest) ProtoReflect() protoreflect.Message {
 	mi := &file_gitpod_experimental_v1_workspaces_proto_msgTypes[4]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -462,19 +462,19 @@ func (x *WorkspaceStatusUpdateRequest) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use WorkspaceStatusUpdateRequest.ProtoReflect.Descriptor instead.
-func (*WorkspaceStatusUpdateRequest) Descriptor() ([]byte, []int) {
+// Deprecated: Use StreamWorkspaceStatusRequest.ProtoReflect.Descriptor instead.
+func (*StreamWorkspaceStatusRequest) Descriptor() ([]byte, []int) {
 	return file_gitpod_experimental_v1_workspaces_proto_rawDescGZIP(), []int{4}
 }
 
-func (x *WorkspaceStatusUpdateRequest) GetWorkspaceId() string {
+func (x *StreamWorkspaceStatusRequest) GetWorkspaceId() string {
 	if x != nil {
 		return x.WorkspaceId
 	}
 	return ""
 }
 
-type WorkspaceStatusUpdateResponse struct {
+type StreamWorkspaceStatusResponse struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
@@ -482,8 +482,8 @@ type WorkspaceStatusUpdateResponse struct {
 	Result *WorkspaceStatus `protobuf:"bytes,1,opt,name=result,proto3" json:"result,omitempty"`
 }
 
-func (x *WorkspaceStatusUpdateResponse) Reset() {
-	*x = WorkspaceStatusUpdateResponse{}
+func (x *StreamWorkspaceStatusResponse) Reset() {
+	*x = StreamWorkspaceStatusResponse{}
 	if protoimpl.UnsafeEnabled {
 		mi := &file_gitpod_experimental_v1_workspaces_proto_msgTypes[5]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -491,13 +491,13 @@ func (x *WorkspaceStatusUpdateResponse) Reset() {
 	}
 }
 
-func (x *WorkspaceStatusUpdateResponse) String() string {
+func (x *StreamWorkspaceStatusResponse) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*WorkspaceStatusUpdateResponse) ProtoMessage() {}
+func (*StreamWorkspaceStatusResponse) ProtoMessage() {}
 
-func (x *WorkspaceStatusUpdateResponse) ProtoReflect() protoreflect.Message {
+func (x *StreamWorkspaceStatusResponse) ProtoReflect() protoreflect.Message {
 	mi := &file_gitpod_experimental_v1_workspaces_proto_msgTypes[5]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -509,12 +509,12 @@ func (x *WorkspaceStatusUpdateResponse) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use WorkspaceStatusUpdateResponse.ProtoReflect.Descriptor instead.
-func (*WorkspaceStatusUpdateResponse) Descriptor() ([]byte, []int) {
+// Deprecated: Use StreamWorkspaceStatusResponse.ProtoReflect.Descriptor instead.
+func (*StreamWorkspaceStatusResponse) Descriptor() ([]byte, []int) {
 	return file_gitpod_experimental_v1_workspaces_proto_rawDescGZIP(), []int{5}
 }
 
-func (x *WorkspaceStatusUpdateResponse) GetResult() *WorkspaceStatus {
+func (x *StreamWorkspaceStatusResponse) GetResult() *WorkspaceStatus {
 	if x != nil {
 		return x.Result
 	}
@@ -2013,12 +2013,12 @@ var file_gitpod_experimental_v1_workspaces_proto_rawDesc = []byte{
 	0x01, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x21, 0x2e, 0x67, 0x69, 0x74, 0x70, 0x6f, 0x64, 0x2e, 0x65,
 	0x78, 0x70, 0x65, 0x72, 0x69, 0x6d, 0x65, 0x6e, 0x74, 0x61, 0x6c, 0x2e, 0x76, 0x31, 0x2e, 0x57,
 	0x6f, 0x72, 0x6b, 0x73, 0x70, 0x61, 0x63, 0x65, 0x52, 0x06, 0x72, 0x65, 0x73, 0x75, 0x6c, 0x74,
-	0x22, 0x41, 0x0a, 0x1c, 0x57, 0x6f, 0x72, 0x6b, 0x73, 0x70, 0x61, 0x63, 0x65, 0x53, 0x74, 0x61,
-	0x74, 0x75, 0x73, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74,
+	0x22, 0x41, 0x0a, 0x1c, 0x53, 0x74, 0x72, 0x65, 0x61, 0x6d, 0x57, 0x6f, 0x72, 0x6b, 0x73, 0x70,
+	0x61, 0x63, 0x65, 0x53, 0x74, 0x61, 0x74, 0x75, 0x73, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74,
 	0x12, 0x21, 0x0a, 0x0c, 0x77, 0x6f, 0x72, 0x6b, 0x73, 0x70, 0x61, 0x63, 0x65, 0x5f, 0x69, 0x64,
 	0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x0b, 0x77, 0x6f, 0x72, 0x6b, 0x73, 0x70, 0x61, 0x63,
-	0x65, 0x49, 0x64, 0x22, 0x60, 0x0a, 0x1d, 0x57, 0x6f, 0x72, 0x6b, 0x73, 0x70, 0x61, 0x63, 0x65,
-	0x53, 0x74, 0x61, 0x74, 0x75, 0x73, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x52, 0x65, 0x73, 0x70,
+	0x65, 0x49, 0x64, 0x22, 0x60, 0x0a, 0x1d, 0x53, 0x74, 0x72, 0x65, 0x61, 0x6d, 0x57, 0x6f, 0x72,
+	0x6b, 0x73, 0x70, 0x61, 0x63, 0x65, 0x53, 0x74, 0x61, 0x74, 0x75, 0x73, 0x52, 0x65, 0x73, 0x70,
 	0x6f, 0x6e, 0x73, 0x65, 0x12, 0x3f, 0x0a, 0x06, 0x72, 0x65, 0x73, 0x75, 0x6c, 0x74, 0x18, 0x01,
 	0x20, 0x01, 0x28, 0x0b, 0x32, 0x27, 0x2e, 0x67, 0x69, 0x74, 0x70, 0x6f, 0x64, 0x2e, 0x65, 0x78,
 	0x70, 0x65, 0x72, 0x69, 0x6d, 0x65, 0x6e, 0x74, 0x61, 0x6c, 0x2e, 0x76, 0x31, 0x2e, 0x57, 0x6f,
@@ -2403,7 +2403,7 @@ func file_gitpod_experimental_v1_workspaces_proto_init() {
 			}
 		}
 		file_gitpod_experimental_v1_workspaces_proto_msgTypes[4].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*WorkspaceStatusUpdateRequest); i {
+			switch v := v.(*StreamWorkspaceStatusRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -2415,7 +2415,7 @@ func file_gitpod_experimental_v1_workspaces_proto_init() {
 			}
 		}
 		file_gitpod_experimental_v1_workspaces_proto_msgTypes[5].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*WorkspaceStatusUpdateResponse); i {
+			switch v := v.(*StreamWorkspaceStatusResponse); i {
 			case 0:
 				return &v.state
 			case 1:

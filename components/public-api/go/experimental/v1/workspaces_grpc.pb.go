@@ -30,8 +30,8 @@ type WorkspacesServiceClient interface {
 	ListWorkspaces(ctx context.Context, in *ListWorkspacesRequest, opts ...grpc.CallOption) (*ListWorkspacesResponse, error)
 	// GetWorkspace returns a single workspace.
 	GetWorkspace(ctx context.Context, in *GetWorkspaceRequest, opts ...grpc.CallOption) (*GetWorkspaceResponse, error)
-	// WorkspaceStatusUpdate returns workspace status once it changed.
-	WorkspaceStatusUpdate(ctx context.Context, in *WorkspaceStatusUpdateRequest, opts ...grpc.CallOption) (WorkspacesService_WorkspaceStatusUpdateClient, error)
+	// StreamWorkspaceStatus returns workspace status once it changed.
+	StreamWorkspaceStatus(ctx context.Context, in *StreamWorkspaceStatusRequest, opts ...grpc.CallOption) (WorkspacesService_StreamWorkspaceStatusClient, error)
 	// GetOwnerToken returns an owner token.
 	GetOwnerToken(ctx context.Context, in *GetOwnerTokenRequest, opts ...grpc.CallOption) (*GetOwnerTokenResponse, error)
 	// CreateAndStartWorkspace creates a new workspace and starts it.
@@ -75,12 +75,12 @@ func (c *workspacesServiceClient) GetWorkspace(ctx context.Context, in *GetWorks
 	return out, nil
 }
 
-func (c *workspacesServiceClient) WorkspaceStatusUpdate(ctx context.Context, in *WorkspaceStatusUpdateRequest, opts ...grpc.CallOption) (WorkspacesService_WorkspaceStatusUpdateClient, error) {
-	stream, err := c.cc.NewStream(ctx, &WorkspacesService_ServiceDesc.Streams[0], "/gitpod.experimental.v1.WorkspacesService/WorkspaceStatusUpdate", opts...)
+func (c *workspacesServiceClient) StreamWorkspaceStatus(ctx context.Context, in *StreamWorkspaceStatusRequest, opts ...grpc.CallOption) (WorkspacesService_StreamWorkspaceStatusClient, error) {
+	stream, err := c.cc.NewStream(ctx, &WorkspacesService_ServiceDesc.Streams[0], "/gitpod.experimental.v1.WorkspacesService/StreamWorkspaceStatus", opts...)
 	if err != nil {
 		return nil, err
 	}
-	x := &workspacesServiceWorkspaceStatusUpdateClient{stream}
+	x := &workspacesServiceStreamWorkspaceStatusClient{stream}
 	if err := x.ClientStream.SendMsg(in); err != nil {
 		return nil, err
 	}
@@ -90,17 +90,17 @@ func (c *workspacesServiceClient) WorkspaceStatusUpdate(ctx context.Context, in 
 	return x, nil
 }
 
-type WorkspacesService_WorkspaceStatusUpdateClient interface {
-	Recv() (*WorkspaceStatusUpdateResponse, error)
+type WorkspacesService_StreamWorkspaceStatusClient interface {
+	Recv() (*StreamWorkspaceStatusResponse, error)
 	grpc.ClientStream
 }
 
-type workspacesServiceWorkspaceStatusUpdateClient struct {
+type workspacesServiceStreamWorkspaceStatusClient struct {
 	grpc.ClientStream
 }
 
-func (x *workspacesServiceWorkspaceStatusUpdateClient) Recv() (*WorkspaceStatusUpdateResponse, error) {
-	m := new(WorkspaceStatusUpdateResponse)
+func (x *workspacesServiceStreamWorkspaceStatusClient) Recv() (*StreamWorkspaceStatusResponse, error) {
+	m := new(StreamWorkspaceStatusResponse)
 	if err := x.ClientStream.RecvMsg(m); err != nil {
 		return nil, err
 	}
@@ -160,8 +160,8 @@ type WorkspacesServiceServer interface {
 	ListWorkspaces(context.Context, *ListWorkspacesRequest) (*ListWorkspacesResponse, error)
 	// GetWorkspace returns a single workspace.
 	GetWorkspace(context.Context, *GetWorkspaceRequest) (*GetWorkspaceResponse, error)
-	// WorkspaceStatusUpdate returns workspace status once it changed.
-	WorkspaceStatusUpdate(*WorkspaceStatusUpdateRequest, WorkspacesService_WorkspaceStatusUpdateServer) error
+	// StreamWorkspaceStatus returns workspace status once it changed.
+	StreamWorkspaceStatus(*StreamWorkspaceStatusRequest, WorkspacesService_StreamWorkspaceStatusServer) error
 	// GetOwnerToken returns an owner token.
 	GetOwnerToken(context.Context, *GetOwnerTokenRequest) (*GetOwnerTokenResponse, error)
 	// CreateAndStartWorkspace creates a new workspace and starts it.
@@ -190,8 +190,8 @@ func (UnimplementedWorkspacesServiceServer) ListWorkspaces(context.Context, *Lis
 func (UnimplementedWorkspacesServiceServer) GetWorkspace(context.Context, *GetWorkspaceRequest) (*GetWorkspaceResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetWorkspace not implemented")
 }
-func (UnimplementedWorkspacesServiceServer) WorkspaceStatusUpdate(*WorkspaceStatusUpdateRequest, WorkspacesService_WorkspaceStatusUpdateServer) error {
-	return status.Errorf(codes.Unimplemented, "method WorkspaceStatusUpdate not implemented")
+func (UnimplementedWorkspacesServiceServer) StreamWorkspaceStatus(*StreamWorkspaceStatusRequest, WorkspacesService_StreamWorkspaceStatusServer) error {
+	return status.Errorf(codes.Unimplemented, "method StreamWorkspaceStatus not implemented")
 }
 func (UnimplementedWorkspacesServiceServer) GetOwnerToken(context.Context, *GetOwnerTokenRequest) (*GetOwnerTokenResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetOwnerToken not implemented")
@@ -257,24 +257,24 @@ func _WorkspacesService_GetWorkspace_Handler(srv interface{}, ctx context.Contex
 	return interceptor(ctx, in, info, handler)
 }
 
-func _WorkspacesService_WorkspaceStatusUpdate_Handler(srv interface{}, stream grpc.ServerStream) error {
-	m := new(WorkspaceStatusUpdateRequest)
+func _WorkspacesService_StreamWorkspaceStatus_Handler(srv interface{}, stream grpc.ServerStream) error {
+	m := new(StreamWorkspaceStatusRequest)
 	if err := stream.RecvMsg(m); err != nil {
 		return err
 	}
-	return srv.(WorkspacesServiceServer).WorkspaceStatusUpdate(m, &workspacesServiceWorkspaceStatusUpdateServer{stream})
+	return srv.(WorkspacesServiceServer).StreamWorkspaceStatus(m, &workspacesServiceStreamWorkspaceStatusServer{stream})
 }
 
-type WorkspacesService_WorkspaceStatusUpdateServer interface {
-	Send(*WorkspaceStatusUpdateResponse) error
+type WorkspacesService_StreamWorkspaceStatusServer interface {
+	Send(*StreamWorkspaceStatusResponse) error
 	grpc.ServerStream
 }
 
-type workspacesServiceWorkspaceStatusUpdateServer struct {
+type workspacesServiceStreamWorkspaceStatusServer struct {
 	grpc.ServerStream
 }
 
-func (x *workspacesServiceWorkspaceStatusUpdateServer) Send(m *WorkspaceStatusUpdateResponse) error {
+func (x *workspacesServiceStreamWorkspaceStatusServer) Send(m *StreamWorkspaceStatusResponse) error {
 	return x.ServerStream.SendMsg(m)
 }
 
@@ -406,8 +406,8 @@ var WorkspacesService_ServiceDesc = grpc.ServiceDesc{
 	},
 	Streams: []grpc.StreamDesc{
 		{
-			StreamName:    "WorkspaceStatusUpdate",
-			Handler:       _WorkspacesService_WorkspaceStatusUpdate_Handler,
+			StreamName:    "StreamWorkspaceStatus",
+			Handler:       _WorkspacesService_StreamWorkspaceStatus_Handler,
 			ServerStreams: true,
 		},
 	},

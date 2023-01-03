@@ -77,15 +77,20 @@ func (s *WorkspaceService) GetWorkspace(ctx context.Context, req *connect.Reques
 	}), nil
 }
 
-func (s *WorkspaceService) WorkspaceStatusUpdate(ctx context.Context, req *connect.Request[v1.WorkspaceStatusUpdateRequest], stream *connect.ServerStream[v1.WorkspaceStatusUpdateResponse]) error {
-	logger := ctxlogrus.Extract(ctx)
+func (s *WorkspaceService) StreamWorkspaceStatus(ctx context.Context, req *connect.Request[v1.StreamWorkspaceStatusRequest], stream *connect.ServerStream[v1.StreamWorkspaceStatusResponse]) error {
+	workspaceID, err := validateWorkspaceID(req.Msg.GetWorkspaceId())
+	if err != nil {
+		return err
+	}
+
+	logger := ctxlogrus.Extract(ctx).WithField("workspace_id", workspaceID)
 
 	conn, err := getConnection(ctx, s.connectionPool)
 	if err != nil {
 		return err
 	}
 
-	workspace, err := conn.GetWorkspace(ctx, req.Msg.GetWorkspaceId())
+	workspace, err := conn.GetWorkspace(ctx, workspaceID)
 	if err != nil {
 		logger.WithError(err).Error("Failed to get workspace.")
 		return proxy.ConvertError(err)
@@ -110,7 +115,7 @@ func (s *WorkspaceService) WorkspaceStatusUpdate(ctx context.Context, req *conne
 				logger.WithError(err).Error("Failed to convert workspace instance.")
 				return proxy.ConvertError(err)
 			}
-			_ = stream.Send(&v1.WorkspaceStatusUpdateResponse{
+			_ = stream.Send(&v1.StreamWorkspaceStatusResponse{
 				Result: &v1.WorkspaceStatus{
 					Instance: instance,
 				},

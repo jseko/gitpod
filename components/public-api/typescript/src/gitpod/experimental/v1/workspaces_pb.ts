@@ -238,76 +238,76 @@ export class GetWorkspaceResponse extends Message<GetWorkspaceResponse> {
 }
 
 /**
- * @generated from message gitpod.experimental.v1.WorkspaceStatusUpdateRequest
+ * @generated from message gitpod.experimental.v1.StreamWorkspaceStatusRequest
  */
-export class WorkspaceStatusUpdateRequest extends Message<WorkspaceStatusUpdateRequest> {
+export class StreamWorkspaceStatusRequest extends Message<StreamWorkspaceStatusRequest> {
   /**
    * @generated from field: string workspace_id = 1;
    */
   workspaceId = "";
 
-  constructor(data?: PartialMessage<WorkspaceStatusUpdateRequest>) {
+  constructor(data?: PartialMessage<StreamWorkspaceStatusRequest>) {
     super();
     proto3.util.initPartial(data, this);
   }
 
   static readonly runtime = proto3;
-  static readonly typeName = "gitpod.experimental.v1.WorkspaceStatusUpdateRequest";
+  static readonly typeName = "gitpod.experimental.v1.StreamWorkspaceStatusRequest";
   static readonly fields: FieldList = proto3.util.newFieldList(() => [
     { no: 1, name: "workspace_id", kind: "scalar", T: 9 /* ScalarType.STRING */ },
   ]);
 
-  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): WorkspaceStatusUpdateRequest {
-    return new WorkspaceStatusUpdateRequest().fromBinary(bytes, options);
+  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): StreamWorkspaceStatusRequest {
+    return new StreamWorkspaceStatusRequest().fromBinary(bytes, options);
   }
 
-  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): WorkspaceStatusUpdateRequest {
-    return new WorkspaceStatusUpdateRequest().fromJson(jsonValue, options);
+  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): StreamWorkspaceStatusRequest {
+    return new StreamWorkspaceStatusRequest().fromJson(jsonValue, options);
   }
 
-  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): WorkspaceStatusUpdateRequest {
-    return new WorkspaceStatusUpdateRequest().fromJsonString(jsonString, options);
+  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): StreamWorkspaceStatusRequest {
+    return new StreamWorkspaceStatusRequest().fromJsonString(jsonString, options);
   }
 
-  static equals(a: WorkspaceStatusUpdateRequest | PlainMessage<WorkspaceStatusUpdateRequest> | undefined, b: WorkspaceStatusUpdateRequest | PlainMessage<WorkspaceStatusUpdateRequest> | undefined): boolean {
-    return proto3.util.equals(WorkspaceStatusUpdateRequest, a, b);
+  static equals(a: StreamWorkspaceStatusRequest | PlainMessage<StreamWorkspaceStatusRequest> | undefined, b: StreamWorkspaceStatusRequest | PlainMessage<StreamWorkspaceStatusRequest> | undefined): boolean {
+    return proto3.util.equals(StreamWorkspaceStatusRequest, a, b);
   }
 }
 
 /**
- * @generated from message gitpod.experimental.v1.WorkspaceStatusUpdateResponse
+ * @generated from message gitpod.experimental.v1.StreamWorkspaceStatusResponse
  */
-export class WorkspaceStatusUpdateResponse extends Message<WorkspaceStatusUpdateResponse> {
+export class StreamWorkspaceStatusResponse extends Message<StreamWorkspaceStatusResponse> {
   /**
    * @generated from field: gitpod.experimental.v1.WorkspaceStatus result = 1;
    */
   result?: WorkspaceStatus;
 
-  constructor(data?: PartialMessage<WorkspaceStatusUpdateResponse>) {
+  constructor(data?: PartialMessage<StreamWorkspaceStatusResponse>) {
     super();
     proto3.util.initPartial(data, this);
   }
 
   static readonly runtime = proto3;
-  static readonly typeName = "gitpod.experimental.v1.WorkspaceStatusUpdateResponse";
+  static readonly typeName = "gitpod.experimental.v1.StreamWorkspaceStatusResponse";
   static readonly fields: FieldList = proto3.util.newFieldList(() => [
     { no: 1, name: "result", kind: "message", T: WorkspaceStatus },
   ]);
 
-  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): WorkspaceStatusUpdateResponse {
-    return new WorkspaceStatusUpdateResponse().fromBinary(bytes, options);
+  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): StreamWorkspaceStatusResponse {
+    return new StreamWorkspaceStatusResponse().fromBinary(bytes, options);
   }
 
-  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): WorkspaceStatusUpdateResponse {
-    return new WorkspaceStatusUpdateResponse().fromJson(jsonValue, options);
+  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): StreamWorkspaceStatusResponse {
+    return new StreamWorkspaceStatusResponse().fromJson(jsonValue, options);
   }
 
-  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): WorkspaceStatusUpdateResponse {
-    return new WorkspaceStatusUpdateResponse().fromJsonString(jsonString, options);
+  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): StreamWorkspaceStatusResponse {
+    return new StreamWorkspaceStatusResponse().fromJsonString(jsonString, options);
   }
 
-  static equals(a: WorkspaceStatusUpdateResponse | PlainMessage<WorkspaceStatusUpdateResponse> | undefined, b: WorkspaceStatusUpdateResponse | PlainMessage<WorkspaceStatusUpdateResponse> | undefined): boolean {
-    return proto3.util.equals(WorkspaceStatusUpdateResponse, a, b);
+  static equals(a: StreamWorkspaceStatusResponse | PlainMessage<StreamWorkspaceStatusResponse> | undefined, b: StreamWorkspaceStatusResponse | PlainMessage<StreamWorkspaceStatusResponse> | undefined): boolean {
+    return proto3.util.equals(StreamWorkspaceStatusResponse, a, b);
   }
 }
 
