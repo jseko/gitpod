@@ -109,17 +109,22 @@ func (s *WorkspaceService) StreamWorkspaceStatus(ctx context.Context, req *conne
 
 	for {
 		select {
-		case update := <-ch:
-			instance, err := convertWorkspaceInstance(update, workspace.Workspace.Shareable)
-			if err != nil {
-				logger.WithError(err).Error("Failed to convert workspace instance.")
-				return proxy.ConvertError(err)
+		case update, ok := <-ch:
+			if ok {
+				instance, err := convertWorkspaceInstance(update, workspace.Workspace.Shareable)
+				if err != nil {
+					logger.WithError(err).Error("Failed to convert workspace instance.")
+					return proxy.ConvertError(err)
+				}
+				_ = stream.Send(&v1.StreamWorkspaceStatusResponse{
+					Result: &v1.WorkspaceStatus{
+						Instance: instance,
+					},
+				})
+			} else {
+				logger.Error("Server connection closed")
+				return connect.NewError(connect.CodeInternal, fmt.Errorf("connection closed"))
 			}
-			_ = stream.Send(&v1.StreamWorkspaceStatusResponse{
-				Result: &v1.WorkspaceStatus{
-					Instance: instance,
-				},
-			})
 		case <-ctx.Done():
 			return nil
 		}
