@@ -7,8 +7,10 @@ package cmd
 import (
 	"fmt"
 	"os"
+	"time"
 
 	"github.com/gitpod-io/gitpod/common-go/log"
+	"github.com/gitpod-io/gitpod/workspace-rollout-job/pkg/analysis"
 	"github.com/gitpod-io/gitpod/workspace-rollout-job/pkg/rollout"
 	"github.com/gitpod-io/gitpod/workspace-rollout-job/pkg/wsbridge"
 	"github.com/spf13/cobra"
@@ -41,8 +43,9 @@ var rootCmd = &cobra.Command{
 			log.WithError(err).Fatal("init condition does not satisfy")
 		}
 
-		// Start the rollout process.
-		job := rollout.New(old, new, "http://prometheus:9090")
+		// Start the rollout process
+		prometheusAnalyzer := analysis.NewPrometheusAnalyzer("localhost:9090")
+		job := rollout.New(old, new, 1*time.Second, 1*time.Second, 25, prometheusAnalyzer)
 		job.Start()
 	},
 }

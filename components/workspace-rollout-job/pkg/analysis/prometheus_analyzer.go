@@ -2,7 +2,7 @@
 // Licensed under the GNU Affero General Public License (AGPL).
 // See License.AGPL.txt in the project root for license information.
 
-package prometheus
+package analysis
 
 import (
 	"context"
@@ -22,13 +22,24 @@ const (
 	errorMetric = "rate(gitpod_ws_manager_workspace_starts_failure_total{cluster=%s})"
 )
 
-// TODO: Mock this out so that we can test the logic in rollout
-func RetrieveErrorRate(ctx context.Context, startTime time.Time, clusterName string) (int64, error) {
+type PrometheusAnalyzer struct {
+	prometheusURL string
+	startTime     time.Time
+}
+
+func NewPrometheusAnalyzer(promURL string) *PrometheusAnalyzer {
+	return &PrometheusAnalyzer{
+		prometheusURL: promURL,
+		startTime:     time.Now(),
+	}
+}
+
+func (pa *PrometheusAnalyzer) MoveForward(ctx context.Context, clusterName string) (bool, error) {
 	client, err := api.NewClient(api.Config{
-		Address: "http://localhost:9090",
+		Address: pa.prometheusURL,
 	})
 	if err != nil {
-		return -1, err
+		return false, err
 	}
 
 	v1api := v1.NewAPI(client)
@@ -36,11 +47,11 @@ func RetrieveErrorRate(ctx context.Context, startTime time.Time, clusterName str
 	defer cancel()
 
 	result, warnings, err := v1api.QueryRange(ctx, fmt.Sprintf(errorMetric, clusterName), v1.Range{
-		Start: startTime,
+		Start: pa.startTime,
 		End:   time.Now(),
 	})
 	if err != nil {
-		return -1, err
+		return false, err
 	}
 	if len(warnings) > 0 {
 		log.Warnf("Warnings: %v\n", warnings)
@@ -48,8 +59,14 @@ func RetrieveErrorRate(ctx context.Context, startTime time.Time, clusterName str
 
 	val := float64(result.(*model.Scalar).Value)
 	if math.IsNaN(val) {
-		return -1, errors.New("query result value is not-a-number")
+		return false, errors.New("query result value is not-a-number")
 	}
 
-	return int64(val), nil
+	// Return true if the error rate is 0
+	if int64(val) == 0 {
+		return true, nil
+	}
+
+	return false, nil
+
 }
