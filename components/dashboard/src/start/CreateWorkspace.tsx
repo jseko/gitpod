@@ -40,7 +40,7 @@ export interface CreateWorkspaceState {
     stillParsing: boolean;
 }
 
-function parseSearchParams(search: string): GitpodServer.StartWorkspaceOptions {
+export function parseSearchParams(search: string): GitpodServer.StartWorkspaceOptions {
     const params = new URLSearchParams(search);
     const options: GitpodServer.StartWorkspaceOptions = {};
     if (params.has(StartOptions.WORKSPACE_CLASS)) {
