@@ -39,7 +39,36 @@ var buildCmd = &cobra.Command{
 		}
 
 		gitpodConfig, err := util.ParseGitpodConfig(wsInfo.CheckoutLocation)
-		fmt.Println(gitpodConfig.Image)
+
+		var baseimage string
+		switch img := gitpodConfig.Image.(type) {
+		case nil:
+			baseimage = "FROM gitpod/workspace-full:latest"
+		case string:
+			baseimage = "FROM " + img
+		case map[string]interface{}:
+			// fc, err := json.Marshal(img)
+			// if err != nil {
+			// 	return err
+			// }
+			// var obj gitpod.Image_object
+			// err = json.Unmarshal(fc, &obj)
+			// if err != nil {
+			// 	return err
+			// }
+			// fc, err = ioutil.ReadFile(filepath.Join(dr.Workdir, obj.Context, obj.File))
+			// if err != nil {
+			// 	// TODO(cw): make error actionable
+			// 	return err
+			// }
+			// baseimage = "\n" + string(fc) + "\n"
+		default:
+			fmt.Println(img)
+			// return fmt.Errorf("unsupported image: %v", img)
+		}
+
+		fmt.Println(baseimage)
+
 	},
 }
 
