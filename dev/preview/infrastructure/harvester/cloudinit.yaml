@@ -18,11 +18,13 @@ write_files:
       systemctl disable google-osconfig-agent &
       systemctl disable google-oslogin-cache.timer &
       systemctl disable google-shutdown-scripts &
+      systemctl disable load-workspace-full.service &
       systemctl stop google-guest-agent &
       systemctl stop google-startup-scripts &
       systemctl stop google-osconfig-agent &
       systemctl stop google-oslogin-cache.timer &
       systemctl stop google-shutdown-scripts &
+      systemctl stop load-workspace-full.service &
   - path: /etc/ssh/sshd_config.d/101-change-ssh-port.conf
     permissions: '0644'
     owner: root
