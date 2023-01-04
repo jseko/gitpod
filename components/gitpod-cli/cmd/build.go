@@ -6,6 +6,7 @@ package cmd
 
 import (
 	"context"
+	"fmt"
 	"io/ioutil"
 	"os"
 	"os/exec"
@@ -47,12 +48,17 @@ var buildCmd = &cobra.Command{
 			return
 		}
 
+		ctx = context.Background()
 		gitpodConfig, err := util.ParseGitpodConfig(wsInfo.CheckoutLocation)
 
+		if gitpodConfig == nil {
+			fmt.Println("Your haven't configured yet a .gitpod.yml")
+			return
+		}
 		var baseimage string
 		switch img := gitpodConfig.Image.(type) {
 		case nil:
-			baseimage = "FROM gitpod/workspace-full:latest"
+			baseimage = ""
 		case string:
 			baseimage = "FROM " + img
 		case map[interface{}]interface{}:
@@ -62,17 +68,27 @@ var buildCmd = &cobra.Command{
 				utils.LogError(ctx, err, "Could not read the Dockerfile", client)
 				return
 			}
+			if string(dockerfile) == "" {
+				fmt.Println("You dockerfile is empty!") // todo: cleanup
+				return
+			}
 			baseimage = "\n" + string(dockerfile) + "\n"
 		default:
 			utils.LogError(ctx, err, "unsupported image: "+img.(string), client)
 			return
 		}
 
-		// fmt.Println("baseimage: " + baseimage)
+		if baseimage == "" {
+			fmt.Println("Your project is not using any custom Docker image.")                                        // todo: cleanup
+			fmt.Println("Check out the following docs, to know how to get started")                                  // todo: cleanup
+			fmt.Println("")                                                                                          // todo: cleanup
+			fmt.Println("https://www.gitpod.io/docs/configure/workspaces/workspace-image#use-a-public-docker-image") // todo: cleanup
+			return
+		}
 
 		tag := "temp-build-" + time.Now().Format("20060102150405")
 
-		dockerCmd := exec.Command("docker", "build", "-t", tag, ".")
+		dockerCmd := exec.Command("docker", "build", "-t", tag, "--progress=tty", ".")
 		dockerCmd.Dir = tmpDir
 
 		dockerCmd.Stdout = os.Stdout
@@ -99,7 +115,6 @@ var buildCmd = &cobra.Command{
 			utils.LogError(ctx, err, "Docker error", client)
 			return
 		}
-
 	},
 }
 
