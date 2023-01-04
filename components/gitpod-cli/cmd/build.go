@@ -6,8 +6,10 @@ package cmd
 
 import (
 	"context"
-	"fmt"
-	"log"
+	"io/ioutil"
+	"os"
+	"os/exec"
+	"path/filepath"
 	"time"
 
 	"github.com/gitpod-io/gitpod/common-go/util"
@@ -32,10 +34,17 @@ var buildCmd = &cobra.Command{
 		}
 		defer client.Close()
 
-		wsInfo, err := client.Info.WorkspaceInfo(ctx, &api.WorkspaceInfoRequest{})
-
+		tmpDir, err := os.MkdirTemp("", "gp-build-*")
 		if err != nil {
-			log.Fatal(err)
+			utils.LogError(ctx, err, "Could not create temporary directory", client)
+			return
+		}
+		defer os.RemoveAll(tmpDir)
+
+		wsInfo, err := client.Info.WorkspaceInfo(ctx, &api.WorkspaceInfoRequest{})
+		if err != nil {
+			utils.LogError(ctx, err, "Could not fetch the workspace info", client)
+			return
 		}
 
 		gitpodConfig, err := util.ParseGitpodConfig(wsInfo.CheckoutLocation)
@@ -46,28 +55,50 @@ var buildCmd = &cobra.Command{
 			baseimage = "FROM gitpod/workspace-full:latest"
 		case string:
 			baseimage = "FROM " + img
-		case map[string]interface{}:
-			// fc, err := json.Marshal(img)
-			// if err != nil {
-			// 	return err
-			// }
-			// var obj gitpod.Image_object
-			// err = json.Unmarshal(fc, &obj)
-			// if err != nil {
-			// 	return err
-			// }
-			// fc, err = ioutil.ReadFile(filepath.Join(dr.Workdir, obj.Context, obj.File))
-			// if err != nil {
-			// 	// TODO(cw): make error actionable
-			// 	return err
-			// }
-			// baseimage = "\n" + string(fc) + "\n"
+		case map[interface{}]interface{}:
+			dockerfilePath := img["file"].(string)
+			dockerfile, err := ioutil.ReadFile(filepath.Join(wsInfo.CheckoutLocation, dockerfilePath))
+			if err != nil {
+				utils.LogError(ctx, err, "Could not read the Dockerfile", client)
+				return
+			}
+			baseimage = "\n" + string(dockerfile) + "\n"
 		default:
-			fmt.Println(img)
-			// return fmt.Errorf("unsupported image: %v", img)
+			utils.LogError(ctx, err, "unsupported image: "+img.(string), client)
+			return
 		}
 
-		fmt.Println(baseimage)
+		// fmt.Println("baseimage: " + baseimage)
+
+		tag := "temp-build-" + time.Now().Format("20060102150405")
+
+		dockerCmd := exec.Command("docker", "build", "-t", tag, ".")
+		dockerCmd.Dir = tmpDir
+
+		dockerCmd.Stdout = os.Stdout
+		dockerCmd.Stderr = os.Stderr
+
+		err = ioutil.WriteFile(filepath.Join(tmpDir, "Dockerfile"), []byte(baseimage), 0644)
+		if err != nil {
+			utils.LogError(ctx, err, "Could not write the temporary Dockerfile", client)
+			return
+		}
+
+		go func() {
+			<-ctx.Done()
+			if proc := dockerCmd.Process; proc != nil {
+				_ = proc.Kill()
+			}
+		}()
+
+		err = dockerCmd.Run()
+		if _, ok := err.(*exec.ExitError); ok {
+			utils.LogError(ctx, err, "Workspace image build failed", client)
+			return
+		} else if err != nil {
+			utils.LogError(ctx, err, "Docker error", client)
+			return
+		}
 
 	},
 }
