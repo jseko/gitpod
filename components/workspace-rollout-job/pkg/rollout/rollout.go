@@ -57,43 +57,44 @@ func (r *RollOutJob) Start(ctx context.Context) {
 			}
 			// Analyzer says no, stop the rollout
 			if !moveForward {
-				close(r.revert)
+				r.revert <- true
 			}
 		}
 	}()
 
-	func() {
-		for {
-			select {
-			case <-r.ticker.C:
-				if r.currentScore == 100 {
-					r.Stop()
-					return
-				}
-				r.currentScore += r.rolloutStep
-				if err := r.RolloutAction.UpdateScore(ctx, r.newCluster, r.currentScore); err != nil {
-					log.Error("Failed to update new cluster score: ", err)
-				}
-				if err := r.RolloutAction.UpdateScore(ctx, r.oldCluster, 100-r.currentScore); err != nil {
-					log.Error("Failed to update old cluster score: ", err)
-				}
-
-				log.Infof("Updated scores as %s:%d, %s:%d", r.newCluster, r.currentScore, r.oldCluster, 100-r.currentScore)
-			case <-r.revert:
-				log.Info("Reverting the rollout")
-				if err := r.RolloutAction.UpdateScore(ctx, r.newCluster, 0); err != nil {
-					log.Error("Failed to update new cluster score: ", err)
-				}
-
-				if err := r.RolloutAction.UpdateScore(ctx, r.oldCluster, 100); err != nil {
-					log.Error("Failed to update old cluster score: ", err)
-				}
-
-			case <-r.done:
+	for {
+		select {
+		case <-r.ticker.C:
+			if r.currentScore == 100 {
+				r.Stop()
 				return
 			}
+			r.currentScore += r.rolloutStep
+			// TODO (ask): Handle them together? so that we don't end up in a mixed state during failure
+			if err := r.RolloutAction.UpdateScore(ctx, r.newCluster, r.currentScore); err != nil {
+				log.Error("Failed to update new cluster score: ", err)
+			}
+			if err := r.RolloutAction.UpdateScore(ctx, r.oldCluster, 100-r.currentScore); err != nil {
+				log.Error("Failed to update old cluster score: ", err)
+			}
+
+			log.Infof("Updated scores as %s:%d, %s:%d", r.newCluster, r.currentScore, r.oldCluster, 100-r.currentScore)
+		case <-r.revert:
+			log.Info("Reverting the rollout")
+			if err := r.RolloutAction.UpdateScore(ctx, r.oldCluster, 100); err != nil {
+				log.Error("Failed to update old cluster score: ", err)
+			}
+
+			if err := r.RolloutAction.UpdateScore(ctx, r.newCluster, 0); err != nil {
+				log.Error("Failed to update new cluster score: ", err)
+			}
+
+			r.Stop()
+
+		case <-r.done:
+			return
 		}
-	}()
+	}
 }
 
 func (r *RollOutJob) Stop() {
