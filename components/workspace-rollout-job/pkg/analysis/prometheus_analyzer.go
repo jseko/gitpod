@@ -68,5 +68,4 @@ func (pa *PrometheusAnalyzer) MoveForward(ctx context.Context, clusterName strin
 	}
 
 	return false, nil
-
 }
