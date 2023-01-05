@@ -7,6 +7,7 @@ package cmd
 import (
 	"context"
 	"fmt"
+	"log"
 	"os"
 	"os/exec"
 	"path/filepath"
@@ -36,7 +37,7 @@ var buildCmd = &cobra.Command{
 
 		tmpDir, err := os.MkdirTemp("", "gp-build-*")
 		if err != nil {
-			utils.LogError(ctx, err, "Could not create temporary directory", client)
+			log.Fatal("Could not create temporary directory")
 			return
 		}
 		defer os.RemoveAll(tmpDir)
@@ -50,7 +51,7 @@ var buildCmd = &cobra.Command{
 		ctx = context.Background()
 		gitpodConfig, err := util.ParseGitpodConfig(wsInfo.CheckoutLocation)
 		if err != nil {
-			utils.LogError(ctx, err, "Could not parse gitpod config", client)
+			log.Fatal("Could not parse gitpod config")
 			return
 		}
 
@@ -72,14 +73,14 @@ var buildCmd = &cobra.Command{
 			baseimage = "FROM " + img
 		case map[interface{}]interface{}:
 			dockerfilePath := filepath.Join(wsInfo.CheckoutLocation, img["file"].(string))
-			fmt.Println(dockerfilePath)
+
 			if _, err := os.Stat(dockerfilePath); os.IsNotExist(err) {
 				fmt.Println("Your .gitpod.yml points to a Dockerfile that doesn't exist: " + dockerfilePath)
 				return
 			}
 			dockerfile, err := os.ReadFile(dockerfilePath)
 			if err != nil {
-				utils.LogError(ctx, err, "Could not read the Dockerfile", client)
+				log.Fatal("Could not read the Dockerfile")
 				return
 			}
 			if string(dockerfile) == "" {
@@ -105,6 +106,13 @@ var buildCmd = &cobra.Command{
 			return
 		}
 
+		err = os.WriteFile(filepath.Join(tmpDir, "Dockerfile"), []byte(baseimage), 0644)
+		if err != nil {
+			fmt.Println("Could not write the temporary Dockerfile")
+			log.Fatal(err)
+			return
+		}
+
 		tag := "temp-build-" + time.Now().Format("20060102150405")
 
 		dockerCmd := exec.Command("docker", "build", "-t", tag, "--progress=tty", ".")
@@ -113,12 +121,6 @@ var buildCmd = &cobra.Command{
 		dockerCmd.Stdout = os.Stdout
 		dockerCmd.Stderr = os.Stderr
 
-		err = os.WriteFile(filepath.Join(tmpDir, "Dockerfile"), []byte(baseimage), 0644)
-		if err != nil {
-			utils.LogError(ctx, err, "Could not write the temporary Dockerfile", client)
-			return
-		}
-
 		go func() {
 			<-ctx.Done()
 			if proc := dockerCmd.Process; proc != nil {
@@ -126,12 +128,15 @@ var buildCmd = &cobra.Command{
 			}
 		}()
 
+		// TODO: duration
 		err = dockerCmd.Run()
 		if _, ok := err.(*exec.ExitError); ok {
-			utils.LogError(ctx, err, "Workspace image build failed", client)
+			fmt.Println("Image Build Failed")
+			log.Fatal(err)
 			return
 		} else if err != nil {
-			utils.LogError(ctx, err, "Docker error", client)
+			fmt.Println("Docker error")
+			log.Fatal(err)
 			return
 		}
 	},
