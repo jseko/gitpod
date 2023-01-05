@@ -34,6 +34,7 @@ export interface JobConfig {
     withObservability: boolean;
     withLocalPreview: boolean;
     withSlowDatabase: boolean;
+    withSetupMode: boolean;
     workspaceFeatureFlags: string[];
     previewEnvironment: PreviewEnvironmentConfig;
     repository: Repository;
@@ -106,6 +107,7 @@ export function jobConfig(werft: Werft, context: any): JobConfig {
     const recreatePreview = "recreate-preview" in buildConfig
     const recreateVm = mainBuild || "recreate-vm" in buildConfig;
     const withSlowDatabase = "with-slow-database" in buildConfig && !mainBuild;
+    const withSetupMode = "with-setup-mode" in buildConfig && !mainBuild;
     const storageClass = buildConfig["storage-class"] || "";
 
     const analytics = parseAnalytics(werft, sliceId, buildConfig["analytics"])
@@ -180,6 +182,7 @@ export function jobConfig(werft: Werft, context: any): JobConfig {
         recreatePreview,
         recreateVm,
         withSlowDatabase,
+        withSetupMode,
     };
 
     werft.logOutput(sliceId, JSON.stringify(jobConfig, null, 2));
