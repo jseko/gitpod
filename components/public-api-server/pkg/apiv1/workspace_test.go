@@ -349,6 +349,39 @@ func TestWorkspaceService_ListWorkspaces(t *testing.T) {
 	}
 }
 
+func TestWorkspaceService_StreamWorkspaceStatus(t *testing.T) {
+	const (
+		foundWorkspaceID = "easycz-seer-xl8o1zacpyw"
+		foundInstanceID  = "f2effcfd-3ddb-4187-b584-256e88a42442"
+		ownerToken       = "some-owner-token"
+	)
+
+	t.Run("returns a workspace status", func(t *testing.T) {
+		serverMock, client := setupWorkspacesService(t)
+
+		serverMock.EXPECT().GetWorkspace(gomock.Any(), foundWorkspaceID).Return(&workspaceTestData[0].Protocol, nil)
+		serverMock.EXPECT().InstanceUpdates(gomock.Any(), foundInstanceID).DoAndReturn(func(ctx context.Context, instanceID string) (<-chan *protocol.WorkspaceInstance, error) {
+			ch := make(chan *protocol.WorkspaceInstance)
+			go func() {
+				ch <- workspaceTestData[0].Protocol.LatestInstance
+			}()
+			return ch, nil
+		})
+
+		ctx, cancel := context.WithCancel(context.Background())
+		resp, err := client.StreamWorkspaceStatus(ctx, connect.NewRequest(&v1.StreamWorkspaceStatusRequest{
+			WorkspaceId: foundWorkspaceID,
+		}))
+
+		require.NoError(t, err)
+
+		resp.Receive()
+		cancel()
+
+		requireEqualProto(t, workspaceTestData[0].API.Status, resp.Msg().Result)
+	})
+}
+
 type workspaceTestDataEntry struct {
 	Name     string
 	Protocol protocol.WorkspaceInfo

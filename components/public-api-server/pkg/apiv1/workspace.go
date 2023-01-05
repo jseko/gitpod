@@ -107,28 +107,20 @@ func (s *WorkspaceService) StreamWorkspaceStatus(ctx context.Context, req *conne
 		return proxy.ConvertError(err)
 	}
 
-	for {
-		select {
-		case update, ok := <-ch:
-			if ok {
-				instance, err := convertWorkspaceInstance(update, workspace.Workspace.Shareable)
-				if err != nil {
-					logger.WithError(err).Error("Failed to convert workspace instance.")
-					return proxy.ConvertError(err)
-				}
-				_ = stream.Send(&v1.StreamWorkspaceStatusResponse{
-					Result: &v1.WorkspaceStatus{
-						Instance: instance,
-					},
-				})
-			} else {
-				logger.Error("Server connection closed")
-				return connect.NewError(connect.CodeInternal, fmt.Errorf("connection closed"))
-			}
-		case <-ctx.Done():
-			return nil
+	for update := range ch {
+		instance, err := convertWorkspaceInstance(update, workspace.Workspace.Shareable)
+		if err != nil {
+			logger.WithError(err).Error("Failed to convert workspace instance.")
+			return proxy.ConvertError(err)
 		}
+		_ = stream.Send(&v1.StreamWorkspaceStatusResponse{
+			Result: &v1.WorkspaceStatus{
+				Instance: instance,
+			},
+		})
 	}
+
+	return nil
 }
 
 func (s *WorkspaceService) GetOwnerToken(ctx context.Context, req *connect.Request[v1.GetOwnerTokenRequest]) (*connect.Response[v1.GetOwnerTokenResponse], error) {
