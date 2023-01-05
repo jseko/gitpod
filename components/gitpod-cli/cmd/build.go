@@ -7,7 +7,6 @@ package cmd
 import (
 	"context"
 	"fmt"
-	"io/ioutil"
 	"os"
 	"os/exec"
 	"path/filepath"
@@ -63,7 +62,12 @@ var buildCmd = &cobra.Command{
 			baseimage = "FROM " + img
 		case map[interface{}]interface{}:
 			dockerfilePath := img["file"].(string)
-			dockerfile, err := ioutil.ReadFile(filepath.Join(wsInfo.CheckoutLocation, dockerfilePath))
+			if _, err := os.Stat(dockerfilePath); os.IsNotExist(err) {
+				fmt.Println("Your .gitpod.yml points to a Dockerfile that doesn't exist at " + dockerfilePath)
+				utils.LogError(ctx, err, "Could not find the Dockerfile at "+dockerfilePath, client)
+				return
+			}
+			dockerfile, err := os.ReadFile(filepath.Join(wsInfo.CheckoutLocation, dockerfilePath))
 			if err != nil {
 				utils.LogError(ctx, err, "Could not read the Dockerfile", client)
 				return
@@ -94,7 +98,7 @@ var buildCmd = &cobra.Command{
 		dockerCmd.Stdout = os.Stdout
 		dockerCmd.Stderr = os.Stderr
 
-		err = ioutil.WriteFile(filepath.Join(tmpDir, "Dockerfile"), []byte(baseimage), 0644)
+		err = os.WriteFile(filepath.Join(tmpDir, "Dockerfile"), []byte(baseimage), 0644)
 		if err != nil {
 			utils.LogError(ctx, err, "Could not write the temporary Dockerfile", client)
 			return
