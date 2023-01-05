@@ -6,7 +6,6 @@ package analysis
 
 import (
 	"context"
-	"errors"
 	"fmt"
 	"math"
 	"time"
@@ -19,7 +18,7 @@ import (
 
 const (
 	// Rate of increase in error count
-	errorMetric = "rate(gitpod_ws_manager_workspace_starts_failure_total{cluster=%s})"
+	errorMetric = "sum by (cluster) (rate(gitpod_ws_manager_workspace_starts_failure_total{cluster=~\"%s.*\"}[%dms]))"
 )
 
 type PrometheusAnalyzer struct {
@@ -46,10 +45,7 @@ func (pa *PrometheusAnalyzer) MoveForward(ctx context.Context, clusterName strin
 	ctx, cancel := context.WithTimeout(ctx, 10*time.Second)
 	defer cancel()
 
-	result, warnings, err := v1api.QueryRange(ctx, fmt.Sprintf(errorMetric, clusterName), v1.Range{
-		Start: pa.startTime,
-		End:   time.Now(),
-	})
+	queryResult, warnings, err := v1api.Query(ctx, fmt.Sprintf(errorMetric, clusterName, time.Since(pa.startTime).Milliseconds()), time.Now())
 	if err != nil {
 		return false, err
 	}
@@ -57,15 +53,28 @@ func (pa *PrometheusAnalyzer) MoveForward(ctx context.Context, clusterName strin
 		log.Warnf("Warnings: %v\n", warnings)
 	}
 
-	val := float64(result.(*model.Scalar).Value)
+	result, ok := queryResult.(model.Vector)
+	if !ok {
+		return false, fmt.Errorf("unexpected result type: %T", queryResult)
+	}
+
+	if len(result) != 1 {
+		if len(result) == 0 {
+			log.Infof("No error data found for %s. Proceeding", clusterName)
+			return true, nil
+		}
+		return false, fmt.Errorf("unexpected result Prometheus result vector length: %d", len(result))
+	}
+	val := float64(result[0].Value)
 	if math.IsNaN(val) {
-		return false, errors.New("query result value is not-a-number")
+		return false, fmt.Errorf("unexpected sample value: %v", result[0].Value)
 	}
 
 	// Return true if the error rate is 0
-	if int64(val) == 0 {
-		return true, nil
+	if val > 0 {
+		log.Infof("Found error metric rate as %d ", val)
+		return false, nil
 	}
 
-	return false, nil
+	return true, nil
 }

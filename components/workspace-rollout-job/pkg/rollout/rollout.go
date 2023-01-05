@@ -35,8 +35,8 @@ func New(oldCluster, newCluster string, rolloutWaitDuration, analysisWaitDuratio
 		rolloutStep:          step,
 		analyzer:             analyzer,
 		RolloutAction:        rolloutAction,
-		done:                 make(chan bool),
-		revert:               make(chan bool),
+		done:                 make(chan bool, 1),
+		revert:               make(chan bool, 1),
 		analysisWaitDuration: analysisWaitDuration,
 		// move forward every waitDuration
 		ticker: time.NewTicker(rolloutWaitDuration),
@@ -49,15 +49,18 @@ func (r *RollOutJob) Start(ctx context.Context) {
 	// problem with the new cluster
 	go func() {
 		for {
-			// check every analysisWaitDuration
-			time.Sleep(r.analysisWaitDuration)
-			moveForward, err := r.analyzer.MoveForward(context.Background(), r.newCluster)
-			if err != nil {
-				log.Error("Failed to retrieve new cluster error count: ", err)
-			}
-			// Analyzer says no, stop the rollout
-			if !moveForward {
-				r.revert <- true
+			// Run only if the revert channel is empty
+			if len(r.revert) == 0 {
+				// check every analysisWaitDuration
+				time.Sleep(r.analysisWaitDuration)
+				moveForward, err := r.analyzer.MoveForward(context.Background(), r.newCluster)
+				if err != nil {
+					log.Error("Failed to retrieve new cluster error count: ", err)
+				}
+				// Analyzer says no, stop the rollout
+				if !moveForward {
+					r.revert <- true
+				}
 			}
 		}
 	}()
@@ -77,8 +80,6 @@ func (r *RollOutJob) Start(ctx context.Context) {
 			if err := r.RolloutAction.UpdateScore(ctx, r.oldCluster, 100-r.currentScore); err != nil {
 				log.Error("Failed to update old cluster score: ", err)
 			}
-
-			log.Infof("Updated scores as %s:%d, %s:%d", r.newCluster, r.currentScore, r.oldCluster, 100-r.currentScore)
 		case <-r.revert:
 			log.Info("Reverting the rollout")
 			if err := r.RolloutAction.UpdateScore(ctx, r.oldCluster, 100); err != nil {

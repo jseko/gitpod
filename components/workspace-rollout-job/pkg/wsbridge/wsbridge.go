@@ -8,6 +8,7 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/gitpod-io/gitpod/common-go/log"
 	"github.com/gitpod-io/gitpod/ws-manager-bridge/api"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
@@ -66,7 +67,7 @@ func (c *WsManagerBridgeClient) UpdateScore(ctx context.Context, clusterName str
 			Score: score,
 		},
 	})
-
+	log.Infof("Updated score as %s:%d", clusterName, score)
 	return nil
 }
 

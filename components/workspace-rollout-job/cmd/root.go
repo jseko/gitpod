@@ -47,8 +47,8 @@ var rootCmd = &cobra.Command{
 		}
 
 		// Start the rollout process
-		prometheusAnalyzer := analysis.NewPrometheusAnalyzer("localhost:9090")
-		job := rollout.New(old, new, 1*time.Second, 1*time.Second, 25, prometheusAnalyzer, wsManagerBridgeClient)
+		prometheusAnalyzer := analysis.NewPrometheusAnalyzer("http://localhost:9090")
+		job := rollout.New(old, new, 20*time.Second, 1*time.Second, 10, prometheusAnalyzer, wsManagerBridgeClient)
 		job.Start(ctx)
 	},
 }
