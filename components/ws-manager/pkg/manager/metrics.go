@@ -6,12 +6,14 @@ package manager
 
 import (
 	"context"
+	"encoding/json"
 	"math"
 	"strings"
 	"sync"
 	"time"
 
 	"github.com/prometheus/client_golang/prometheus"
+	"google.golang.org/protobuf/encoding/protojson"
 	corev1 "k8s.io/api/core/v1"
 
 	wsk8s "github.com/gitpod-io/gitpod/common-go/kubernetes"
@@ -242,19 +244,39 @@ func (m *metrics) Register(reg prometheus.Registerer) error {
 }
 
 func (m *metrics) OnChange(status *api.WorkspaceStatus) {
+	clog := log.WithFields(log.OWI(status.Metadata.Owner, status.Metadata.MetaId, status.Id))
+
 	var removeFromState bool
 	tpe := api.WorkspaceType_name[int32(status.Spec.Type)]
 	m.mu.Lock()
 	defer func() {
 		if removeFromState {
 			delete(m.phaseState, status.Id)
-		} else {
+		} else if m.phaseState[status.Id] != status.Phase { // There is a state change
 			m.phaseState[status.Id] = status.Phase
+
+			// There are some conditions we'd like to get notified about, for example while running experiements or because
+			// they represent out-of-the-ordinary situations.
+			// We attempt to use the GCP Error Reporting for this, hence log these situations as errors.
+			if status.Conditions.Failed != "" {
+				status, _ := protojson.Marshal(status)
+				safeStatus, _ := log.RedactJSON(status)
+				safeStatusLog := make(map[string]interface{})
+				_ = json.Unmarshal(safeStatus, &safeStatusLog)
+				clog.WithFields(safeStatusLog).Error("workspace failed")
+			}
 		}
 		m.mu.Unlock()
 	}()
 
 	switch status.Phase {
+	case api.WorkspacePhase_UNKNOWN:
+		status, _ := protojson.Marshal(status)
+		safeStatus, _ := log.RedactJSON(status)
+		safeStatusLog := make(map[string]interface{})
+		_ = json.Unmarshal(safeStatus, &safeStatusLog)
+		clog.WithFields(safeStatusLog).Error("workspace in UNKNOWN phase")
+
 	case api.WorkspacePhase_RUNNING:
 		if status.Metadata.StartedAt == nil {
 			return
