@@ -8,6 +8,7 @@ import (
 	"bytes"
 	"context"
 	"fmt"
+	"io"
 	"io/ioutil"
 	"os"
 	"os/exec"
@@ -155,6 +156,8 @@ func buildImage(ctx context.Context, contextDir, dockerfile, authLayer, target s
 	buildctlCmd.Stderr = os.Stderr
 	buildctlCmd.Stdout = os.Stdout
 
+	stderrPipe, _ := buildctlCmd.StderrPipe()
+
 	env := os.Environ()
 	env = append(env, "DOCKER_CONFIG=/tmp")
 	buildctlCmd.Env = env
@@ -163,9 +166,11 @@ func buildImage(ctx context.Context, contextDir, dockerfile, authLayer, target s
 		return err
 	}
 
+	errSlurp, _ := io.ReadAll(stderrPipe)
+
 	err = buildctlCmd.Wait()
 	if err != nil {
-		return err
+		return xerrors.Errorf("build failed: %w, build error log: %s", err, errSlurp)
 	}
 
 	return nil
