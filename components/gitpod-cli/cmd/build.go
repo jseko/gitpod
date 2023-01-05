@@ -51,7 +51,11 @@ var buildCmd = &cobra.Command{
 		gitpodConfig, err := util.ParseGitpodConfig(wsInfo.CheckoutLocation)
 
 		if gitpodConfig == nil {
-			fmt.Println("Your haven't configured yet a .gitpod.yml")
+			fmt.Println("To test the image build, you need to configure your project with a .gitpod.yml file")
+			fmt.Println("")
+			fmt.Println("For a quick start, try running:\n$ gp init -i")
+			fmt.Println("")
+			fmt.Println("Alternatively, check out the following docs for getting started configuring your project: https://www.gitpod.io/docs/configure#configure-gitpod")
 			return
 		}
 		var baseimage string
@@ -73,7 +77,11 @@ var buildCmd = &cobra.Command{
 				return
 			}
 			if string(dockerfile) == "" {
-				fmt.Println("You dockerfile is empty!") // todo: cleanup
+				fmt.Println("Your Gitpod's Dockerfile is empty")
+				fmt.Println("")
+				fmt.Println("To learn how to customize your workspace, check out the following docs: https://www.gitpod.io/docs/configure/workspaces/workspace-image#use-a-custom-dockerfile")
+				fmt.Println("")
+				fmt.Println("Once you configure your Dockerfile, re-run this command to validate your changes")
 				return
 			}
 			baseimage = "\n" + string(dockerfile) + "\n"
