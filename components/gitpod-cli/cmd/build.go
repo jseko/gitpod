@@ -49,15 +49,21 @@ var buildCmd = &cobra.Command{
 
 		ctx = context.Background()
 		gitpodConfig, err := util.ParseGitpodConfig(wsInfo.CheckoutLocation)
+		if err != nil {
+			utils.LogError(ctx, err, "Could not parse gitpod config", client)
+			return
+		}
 
 		if gitpodConfig == nil {
 			fmt.Println("To test the image build, you need to configure your project with a .gitpod.yml file")
 			fmt.Println("")
 			fmt.Println("For a quick start, try running:\n$ gp init -i")
 			fmt.Println("")
-			fmt.Println("Alternatively, check out the following docs for getting started configuring your project: https://www.gitpod.io/docs/configure#configure-gitpod")
+			fmt.Println("Alternatively, check out the following docs for getting started configuring your project")
+			fmt.Println("https://www.gitpod.io/docs/configure#configure-gitpod")
 			return
 		}
+
 		var baseimage string
 		switch img := gitpodConfig.Image.(type) {
 		case nil:
@@ -65,13 +71,13 @@ var buildCmd = &cobra.Command{
 		case string:
 			baseimage = "FROM " + img
 		case map[interface{}]interface{}:
-			dockerfilePath := img["file"].(string)
+			dockerfilePath := filepath.Join(wsInfo.CheckoutLocation, img["file"].(string))
+			fmt.Println(dockerfilePath)
 			if _, err := os.Stat(dockerfilePath); os.IsNotExist(err) {
-				fmt.Println("Your .gitpod.yml points to a Dockerfile that doesn't exist at " + dockerfilePath)
-				utils.LogError(ctx, err, "Could not find the Dockerfile at "+dockerfilePath, client)
+				fmt.Println("Your .gitpod.yml points to a Dockerfile that doesn't exist: " + dockerfilePath)
 				return
 			}
-			dockerfile, err := os.ReadFile(filepath.Join(wsInfo.CheckoutLocation, dockerfilePath))
+			dockerfile, err := os.ReadFile(dockerfilePath)
 			if err != nil {
 				utils.LogError(ctx, err, "Could not read the Dockerfile", client)
 				return
@@ -79,14 +85,15 @@ var buildCmd = &cobra.Command{
 			if string(dockerfile) == "" {
 				fmt.Println("Your Gitpod's Dockerfile is empty")
 				fmt.Println("")
-				fmt.Println("To learn how to customize your workspace, check out the following docs: https://www.gitpod.io/docs/configure/workspaces/workspace-image#use-a-custom-dockerfile")
+				fmt.Println("To learn how to customize your workspace, check out the following docs:")
+				fmt.Println("https://www.gitpod.io/docs/configure/workspaces/workspace-image#use-a-custom-dockerfile")
 				fmt.Println("")
 				fmt.Println("Once you configure your Dockerfile, re-run this command to validate your changes")
 				return
 			}
 			baseimage = "\n" + string(dockerfile) + "\n"
 		default:
-			utils.LogError(ctx, err, "unsupported image: "+img.(string), client)
+			fmt.Println("Check your .gitpod.yml and make sure the image property is configured correctly")
 			return
 		}
 
