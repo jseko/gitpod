@@ -16,12 +16,12 @@ resource "google_compute_instance" "default" {
 
   tags = ["preview"]
 
-  scheduling {
-    provisioning_model          = "SPOT"
-    preemptible                 = true
-    automatic_restart           = false
-    instance_termination_action = "STOP"
-  }
+  #  scheduling {
+  #    provisioning_model          = "SPOT"
+  #    preemptible                 = true
+  #    automatic_restart           = false
+  #    instance_termination_action = "STOP"
+  #  }
 
   metadata = {
     ssh-keys           = "dev:${file(pathexpand("~/.ssh/vm_id_rsa.pub"))}"

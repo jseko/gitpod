@@ -21,6 +21,12 @@ variable "dev_kube_context" {
   description = "The name of the dev kube context"
 }
 
+variable "harvester_ingress_ip" {
+  type        = string
+  default     = "159.69.172.117"
+  description = "Ingress IP in Harvester cluster"
+}
+
 variable "vmi" {
   type        = string
   description = "The storage class for the VM"

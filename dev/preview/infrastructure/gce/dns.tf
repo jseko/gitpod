@@ -11,7 +11,7 @@ resource "google_dns_record_set" "root" {
   ttl  = 300
 
   managed_zone = data.google_dns_managed_zone.preview-gitpod-dev.name
-  rrdatas      = [google_compute_instance.default.network_interface.0.access_config.0.nat_ip]
+  rrdatas      = [var.harvester_ingress_ip]
 }
 
 resource "google_dns_record_set" "root-wc" {
@@ -22,7 +22,7 @@ resource "google_dns_record_set" "root-wc" {
   ttl  = 300
 
   managed_zone = data.google_dns_managed_zone.preview-gitpod-dev.name
-  rrdatas      = [google_compute_instance.default.network_interface.0.access_config.0.nat_ip]
+  rrdatas      = [var.harvester_ingress_ip]
 }
 
 resource "google_dns_record_set" "root-wc-ws-dev" {
@@ -33,7 +33,7 @@ resource "google_dns_record_set" "root-wc-ws-dev" {
   ttl  = 300
 
   managed_zone = data.google_dns_managed_zone.preview-gitpod-dev.name
-  rrdatas      = [google_compute_instance.default.network_interface.0.access_config.0.nat_ip]
+  rrdatas      = [var.harvester_ingress_ip]
 }
 
 resource "google_dns_record_set" "root-wc-ws-dev-ssh" {
