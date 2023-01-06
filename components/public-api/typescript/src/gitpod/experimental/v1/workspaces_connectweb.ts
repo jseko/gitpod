@@ -9,7 +9,7 @@
 /* eslint-disable */
 /* @ts-nocheck */
 
-import {CreateAndStartWorkspaceRequest, CreateAndStartWorkspaceResponse, DeleteWorkspaceRequest, DeleteWorkspaceResponse, GetOwnerTokenRequest, GetOwnerTokenResponse, GetWorkspaceRequest, GetWorkspaceResponse, ListWorkspacesRequest, ListWorkspacesResponse, StopWorkspaceRequest, StopWorkspaceResponse, UpdatePortRequest, UpdatePortResponse} from "./workspaces_pb.js";
+import {CreateAndStartWorkspaceRequest, CreateAndStartWorkspaceResponse, DeleteWorkspaceRequest, DeleteWorkspaceResponse, GetOwnerTokenRequest, GetOwnerTokenResponse, GetWorkspaceRequest, GetWorkspaceResponse, ListWorkspacesRequest, ListWorkspacesResponse, StopWorkspaceRequest, StopWorkspaceResponse, StreamWorkspaceStatusRequest, StreamWorkspaceStatusResponse, UpdatePortRequest, UpdatePortResponse} from "./workspaces_pb.js";
 import {MethodKind} from "@bufbuild/protobuf";
 
 /**
